@@ -1,0 +1,7 @@
+parameters:
+#    poe_core.example.class: Poe\CoreBundle\Example
+
+services:
+#    poe_core.example:
+#        class: %poe_core.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
