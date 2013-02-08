@@ -8,7 +8,7 @@ class ItemController extends Controller
 {
     public function searchAction()
     {
-        $q = $this->getRequest()->query->get('q', 'a');
+        $q = $this->getRequest()->query->get('q');
 
         $qb = $this->get('poe_core.item_manager')->getSearchQueryBuilder(
             $q,

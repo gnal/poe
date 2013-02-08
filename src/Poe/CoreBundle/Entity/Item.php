@@ -43,6 +43,11 @@ class Item
     protected $maxPhysicalDamage;
 
     /**
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     */
+    protected $criticalStrikeChance;
+
+    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $intReq;
@@ -93,18 +98,30 @@ class Item
     protected $accountName;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      */
-    protected $thread;
+    protected $threadId;
 
-    public function getThread()
+    public function getCriticalStrikeChance()
     {
-        return $this->thread;
+        return $this->criticalStrikeChance;
     }
 
-    public function setThread($thread)
+    public function setCriticalStrikeChance($criticalStrikeChance)
     {
-        $this->thread = $thread;
+        $this->criticalStrikeChance = $criticalStrikeChance;
+
+        return $this;
+    }
+
+    public function getThreadId()
+    {
+        return $this->threadId;
+    }
+
+    public function setThreadId($threadId)
+    {
+        $this->threadId = $threadId;
 
         return $this;
     }

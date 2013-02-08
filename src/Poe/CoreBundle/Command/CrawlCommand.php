@@ -24,12 +24,44 @@ class CrawlCommand extends ContainerAwareCommand
         'Bow' => 'Bow',
         'Wand' => 'Wand',
         'Dagger' => 'Dagger',
+        'Staff' => 'Staff',
+        'Claw' => 'Claw',
+    ];
+
+    private $bootsKeywords = [
+        'Boots',
+        'Greaves',
+        'Slippers',
+        'Shoes',
+    ];
+
+    private $gloveKeywords = [
+        'Gloves',
+        'Gauntlets',
+        'Mitts',
+    ];
+
+    private $helmetKeywords = [
+        'Casque',
+        'Hood',
+        'Coif',
+        'Helmet',
+        'Mask',
+        'Circlet',
+        'Cap',
+    ];
+
+    private $beltKeywords = [
+        'Belt',
     ];
 
     protected function configure()
     {
         $this
             ->setName('poe:core:crawl')
+            ->setDefinition(array(
+                new InputArgument('id', InputArgument::OPTIONAL, 'The thread ID'),
+            ))
         ;
     }
 
@@ -38,59 +70,30 @@ class CrawlCommand extends ContainerAwareCommand
         $this->getContainer()->get('msi_cmf.translatable_listener')->setSkipPostLoad(true);
         $this->itemManager = $this->getContainer()->get('poe_core.item_manager');
         $this->itemTypeManager = $this->getContainer()->get('poe_core.item_type_manager');
+        $id = $input->getArgument('id');
+        $this->output = $output;
 
-        $this->process($output);
+        if ($id) {
+            $this->processID($id);
+        } else {
+            $this->process();
+        }
 
-        $output->writeln("<comment>Done!</comment>");
+        $this->output->writeln("<comment>Done!</comment>");
     }
 
-    protected function process($output)
+    protected function processID($id)
     {
-        // $ch = curl_init();
-        // curl_setopt($ch, CURLOPT_URL, 'http://www.pathofexile.com/forum/view-thread/100118');
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // $html = curl_exec($ch);
-        // curl_close($ch);
+        $data = $this->getJson($id);
 
-        // $crawler = new Crawler($html);
-        // $i=1;
-        // foreach ($crawler->filter('body')->children() as $element) {
-        //     if ($i == count($crawler->filter('body')->children())) {
-        //         $foo = substr(substr(trim($element->nodeValue), 122), 0, -34);
-        //     }
-        //     $i++;
-        // }
+        die(print_r($data[2]));
+    }
 
-        // $data = json_decode(utf8_encode($foo), true);
-
-        // // $this->findFields($data[0][1]);
-
-        // die(print_r($data[0][1]));
-
-        // ----------------- //
-
+    protected function process()
+    {
         $l = 1;
-        for ($j=100122; $j < 100133; $j++) {
-            $url = 'http://www.pathofexile.com/forum/view-thread/'.$j;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $html = curl_exec($ch);
-            curl_close($ch);
-
-            $output->writeln($l.' <comment>CRAWL</comment> http://www.pathofexile.com/forum/view-thread/'.$j);
-
-            $crawler = new Crawler($html);
-
-            $i=1;
-            foreach ($crawler->filter('body')->children() as $element) {
-                if ($i == count($crawler->filter('body')->children())) {
-                    $foo = substr(substr(trim($element->nodeValue), 122), 0, -34);
-                }
-                $i++;
-            }
-
-            $data = json_decode(utf8_encode($foo), true);
+        for ($id=100177; $id < 100199; $id++) {
+            $data = $this->getJson($id);
 
             if (!$data) {
                 $l++;
@@ -114,45 +117,14 @@ class CrawlCommand extends ContainerAwareCommand
                     ->setLeague($row['league'])
                     ->setSockets('dada')
                     ->setIdentified($row['identified'])
-                    ->setAccountName($crawler->filter('a.profile-link.post_by_account')->text())
-                    ->setThread($url)
+                    ->setAccountName($this->crawler->filter('a.profile-link.post_by_account')->text())
+                    ->setThreadId($id)
                 ;
 
                 // type
-                $type = $this->itemTypeManager->getFindByQueryBuilder(['a.name' => $row['typeLine']])->getQuery()->getOneOrNullResult();
-
-                if (!$type) {
-                    $type = $this->itemTypeManager->create();
-
-                    $type->setName($row['typeLine']);
-                }
-                if (!$type->getParent()) {
-                    if (preg_match('#\sRing$#', $row['typeLine'])) {
-                        $parentType = $this->itemTypeManager->getFindByQueryBuilder(['a.name' => 'Ring'])->getQuery()->getOneOrNullResult();
-
-                        if (!$parentType) {
-                            $parentType = $this->itemTypeManager->create();
-
-                            $parentType->setName('Ring');
-
-                            $this->itemTypeManager->update($parentType);
-                        }
-
-                        $type->setParent($parentType);
-                    }
-                    if (preg_match('#\sAmulet$#', $row['typeLine'])) {
-                        $parentType = $this->itemTypeManager->getFindByQueryBuilder(['a.name' => 'Amulet'])->getQuery()->getOneOrNullResult();
-
-                        if (!$parentType) {
-                            $parentType = $this->itemTypeManager->create();
-
-                            $parentType->setName('Amulet');
-
-                            $this->itemTypeManager->update($parentType);
-                        }
-
-                        $type->setParent($parentType);
-                    }
+                $type = $this->findType($row);
+                if (!$type->getId()) {
+                    $this->itemTypeManager->update($type);
                 }
 
                 // requirements
@@ -188,38 +160,160 @@ class CrawlCommand extends ContainerAwareCommand
                         if ($property['name'] === 'Quality') {
                             $item->setQuality(str_replace('%', '', $property['values'][0][0]));
                         }
-                        if (!$type->getParent()) {
-                            if (in_array($property['name'], $this->parentTypes)) {
-                                $parentType = $this->itemTypeManager->getFindByQueryBuilder(['a.name' => array_search($property['name'], $this->parentTypes)])->getQuery()->getOneOrNullResult();
-
-                                if (!$parentType) {
-                                    $parentType = $this->itemTypeManager->create();
-
-                                    $parentType->setName(array_search($property['name'], $this->parentTypes));
-
-                                    $this->itemTypeManager->update($parentType);
-                                }
-
-                                $type->setParent($parentType);
-                            }
-                        }
                     }
-                }
-
-                if (!$type->getId()) {
-                    $this->itemTypeManager->update($type);
                 }
 
                 $item->setType($type);
                 $this->itemManager->updateBatch($item, $i);
 
                 $label = $row['name'] ?: $row['typeLine'];
-                $output->writeln($l." <info>ADD</info> ".$label);
+                $this->output->writeln("<info>ADD</info> ".$label);
                 $i++;
             }
             $l++;
             $this->itemManager->getEntityManager()->flush();
         }
+    }
+
+    private function findType($row)
+    {
+        $type = $this->itemTypeManager->getFindByQueryBuilder(['a.name' => $row['typeLine']])->getQuery()->getOneOrNullResult();
+        if (!$type) {
+            $type = $this->itemTypeManager->create();
+            $type->setName($row['typeLine']);
+        }
+
+        if ($type->getParent()) {
+            return $type;
+        }
+
+        if (preg_match('#Ring#', $row['typeLine'])) {
+            $parentType = $this->findOrCreateParentType('Ring');
+            $type->setParent($parentType);
+
+            return $type;
+        }
+
+        if (preg_match('#Amulet#', $row['typeLine'])) {
+            $parentType = $this->findOrCreateParentType('Amulet');
+            $type->setParent($parentType);
+
+            return $type;
+        }
+
+        foreach ($this->bootsKeywords as $keyword) {
+            if (preg_match('#'.$keyword.'#', $row['typeLine'])) {
+                $parentType = $this->findOrCreateParentType('Boots');
+                $type->setParent($parentType);
+
+                return $type;
+            }
+        }
+
+        foreach ($this->helmetKeywords as $keyword) {
+            if (preg_match('#'.$keyword.'#', $row['typeLine'])) {
+                $parentType = $this->findOrCreateParentType('Helmet');
+                $type->setParent($parentType);
+
+                return $type;
+            }
+        }
+
+        foreach ($this->gloveKeywords as $keyword) {
+            if (preg_match('#'.$keyword.'#', $row['typeLine'])) {
+                $parentType = $this->findOrCreateParentType('Glove');
+                $type->setParent($parentType);
+
+                return $type;
+            }
+        }
+
+        foreach ($this->beltKeywords as $keyword) {
+            if (preg_match('#'.$keyword.'#', $row['typeLine'])) {
+                $parentType = $this->findOrCreateParentType('Belt');
+                $type->setParent($parentType);
+
+                return $type;
+            }
+        }
+
+        if (preg_match('#Flask#', $row['typeLine'])) {
+            $parentType = $this->findOrCreateParentType('Flask');
+            $type->setParent($parentType);
+
+            return $type;
+        }
+
+        if (preg_match('#Quiver#', $row['typeLine'])) {
+            $parentType = $this->findOrCreateParentType('Quiver');
+            $type->setParent($parentType);
+
+            return $type;
+        }
+
+        if (isset($row['properties'])) {
+            foreach ($row['properties'] as $property) {
+                if (in_array($property['name'], $this->parentTypes)) {
+                    $parentType = $this->findOrCreateParentType(array_search($property['name'], $this->parentTypes));
+                    $type->setParent($parentType);
+
+                    return $type;
+                }
+                if (in_array($property['name'], ['Armour', 'Evasion Rating', 'Energy Shield'])) {
+                    if ($row['w'] == 2 && $row['h'] == 3) {
+                        $parentType = $this->findOrCreateParentType('Chest Armor');
+                        $type->setParent($parentType);
+
+                        return $type;
+                    }
+                }
+                if ($property['name'] === 'Level') {
+                    $parentType = $this->findOrCreateParentType('Gem');
+                    $type->setParent($parentType);
+
+                    return $type;
+                }
+            }
+        }
+
+        return $type;
+    }
+
+    private function findOrCreateParentType($name)
+    {
+        $parentType = $this->itemTypeManager->getFindByQueryBuilder(['a.name' => $name])->getQuery()->getOneOrNullResult();
+        if (!$parentType) {
+            $parentType = $this->itemTypeManager->create();
+            $parentType->setName($name);
+            $this->itemTypeManager->update($parentType);
+        }
+
+        return $parentType;
+    }
+
+    private function getJson($id)
+    {
+        $url = 'http://www.pathofexile.com/forum/view-thread/'.$id;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $html = curl_exec($ch);
+        curl_close($ch);
+
+        $this->output->writeln('<comment>CRAWL</comment> http://www.pathofexile.com/forum/view-thread/'.$id);
+
+        $this->crawler = new Crawler($html);
+        $i=1;
+        foreach ($this->crawler->filter('body')->children() as $element) {
+            if ($i == count($this->crawler->filter('body')->children())) {
+                $foo = substr(substr(trim($element->nodeValue), 122), 0, -34);
+            }
+            $i++;
+        }
+
+        $data = json_decode(utf8_encode($foo), true);
+
+        return $data;
     }
 
     // protected $fields = [];

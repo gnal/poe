@@ -20,12 +20,12 @@
         <th>Type</th>
         <th class="span1">Quality</th>
         <th class="span2">Physical Damage</th>
-        <th>Account Name</th>
+        <th>Seller</th>
     </tr>
 {% for item in items %}
     <tr>
         <td>
-            <a target="_blank" href="{{ item.thread }}">{% if item.type.parent %}{{ item.type.parent }} <i class="icon-chevron-right"></i> {% endif %}{{ item.type }}</a>
+            <a target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">{% if item.type.parent %}{{ item.type.parent }} <i class="icon-chevron-right"></i> {% endif %}{{ item.type }}</a>
             <br>
             <small>
                 <span class="muted">Lvl: {{ item.lvlReq }}</span>
