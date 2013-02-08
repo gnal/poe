@@ -11,6 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\CssSelector\CssSelector;
 
+use Poe\CoreBundle\Entity\Item;
+
 class CrawlCommand extends ContainerAwareCommand
 {
     private $parentTypes = [
@@ -114,12 +116,18 @@ class CrawlCommand extends ContainerAwareCommand
                     ->setName($row['name'])
                     ->setVerified($row['verified'])
                     ->setIcon($row['icon'])
-                    ->setLeague($row['league'])
                     ->setSockets('dada')
                     ->setIdentified($row['identified'])
                     ->setAccountName($this->crawler->filter('a.profile-link.post_by_account')->text())
                     ->setThreadId($id)
                 ;
+
+                // league
+                if ($row['league'] == 'Default') {
+                    $item->setLeague(Item::LEAGUE_DEFAULT);
+                } elseif ($row['league'] == 'Hardcore') {
+                    $item->setLeague(Item::LEAGUE_HARDCORE);
+                }
 
                 // type
                 $type = $this->findType($row);

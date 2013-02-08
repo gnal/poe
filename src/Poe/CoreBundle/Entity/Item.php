@@ -132,7 +132,7 @@ class Item
     protected $icon;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      */
     protected $league;
 
