@@ -92,7 +92,7 @@ class CrawlCommand extends ContainerAwareCommand
     protected function process()
     {
         $l = 1;
-        for ($id=100177; $id < 100199; $id++) {
+        for ($id=110579; $id < 110589; $id++) {
             $data = $this->getJson($id);
 
             if (!$data) {
@@ -157,8 +157,57 @@ class CrawlCommand extends ContainerAwareCommand
                                 ->setMaxPhysicalDamage($max)
                             ;
                         }
+                        if ($property['name'] === 'Elemental Damage') {
+                            foreach ($property['values'] as $value) {
+                                if ($value[1] == 4) {
+                                    $pieces = explode('-', $value[0]);
+                                    $min = $pieces[0];
+                                    $max = $pieces[1];
+                                    $item
+                                        ->setMinFireDamage($min)
+                                        ->setMaxFireDamage($max)
+                                    ;
+                                }
+                                if ($value[1] == 5) {
+                                    $pieces = explode('-', $value[0]);
+                                    $min = $pieces[0];
+                                    $max = $pieces[1];
+                                    $item
+                                        ->setMinColdDamage($min)
+                                        ->setMaxColdDamage($max)
+                                    ;
+                                }
+                                if ($value[1] == 6) {
+                                    $pieces = explode('-', $value[0]);
+                                    $min = $pieces[0];
+                                    $max = $pieces[1];
+                                    $item
+                                        ->setMinLightningDamage($min)
+                                        ->setMaxLightningDamage($max)
+                                    ;
+                                }
+                            }
+                        }
                         if ($property['name'] === 'Quality') {
                             $item->setQuality(str_replace('%', '', $property['values'][0][0]));
+                        }
+                        if ($property['name'] === 'Armour') {
+                            $item->setArmour($property['values'][0][0]);
+                        }
+                        if ($property['name'] === 'Evasion Rating') {
+                            $item->setEvasionRating($property['values'][0][0]);
+                        }
+                        if ($property['name'] === 'Energy Shield') {
+                            $item->setEnergyShield($property['values'][0][0]);
+                        }
+                        if ($property['name'] === 'Attacks per Second') {
+                            $item->setAttacksPerSecond($property['values'][0][0]);
+                        }
+                        if ($property['name'] === 'Critical Strike Chance') {
+                            $item->setCriticalStrikeChance($property['values'][0][0]);
+                        }
+                        if ($property['name'] === 'Map Level') {
+                            $item->setMapLvl($property['values'][0][0]);
                         }
                     }
                 }
@@ -269,6 +318,12 @@ class CrawlCommand extends ContainerAwareCommand
                 }
                 if ($property['name'] === 'Level') {
                     $parentType = $this->findOrCreateParentType('Gem');
+                    $type->setParent($parentType);
+
+                    return $type;
+                }
+                if ($property['name'] === 'Map Level') {
+                    $parentType = $this->findOrCreateParentType('Map');
                     $type->setParent($parentType);
 
                     return $type;

@@ -19,24 +19,49 @@
     <tr>
         <th>Type</th>
         <th class="span1">Quality</th>
-        <th class="span2">Physical Damage</th>
-        <th>Seller</th>
+        <th class="span2">Physical</th>
+        <th class="span2">Elemental</th>
+        <th class="span1">Armour</th>
+        <th class="span1">ER</th>
+        <th class="span1">ES</th>
     </tr>
 {% for item in items %}
     <tr>
         <td>
-            <a target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">{% if item.type.parent %}{{ item.type.parent }} <i class="icon-chevron-right"></i> {% endif %}{{ item.type }}</a>
+            {% if item.type.parent %}
+                {{ item.type.parent }}
+                <i class="icon-chevron-right"></i>
+            {% endif %}
+            <a target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">{{ item.type }}</a>
             <br>
             <small>
-                <span class="muted">Lvl: {{ item.lvlReq }}</span>
-                {% if item.strReq %}<span class="text-error">Str: 11</span>{% endif %}
-                {% if item.dexReq %}<span class="text-success">Dex: 11</span>{% endif %}
-                {% if item.intReq %}<span class="text-info">Int: 11</span>{% endif %}
+                Req:
+                {% if item.lvlReq %}<span class="muted">Lvl: {{ item.lvlReq }}</span>{% endif %}
+                {% if item.strReq %}<span class="text-error">Str: {{ item.strReq }}</span>{% endif %}
+                {% if item.dexReq %}<span class="text-success">Dex: {{ item.dexReq }}</span>{% endif %}
+                {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
             </small>
         </td>
         <td>{% if item.quality %}{{ item.quality }}%{% endif %}</td>
-        <td>{% if item.minPhysicalDamage %}{{ item.minPhysicalDamage }}-{{ item.maxPhysicalDamage }}{% endif %}</td>
-        <td>{{ item.accountName }}</td>
+        <td>{% if item.minPhysicalDamage %}{{ item.minPhysicalDamage }}-{{ item.maxPhysicalDamage }} ( ~{{ (item.maxPhysicalDamage - item.minPhysicalDamage) / 2 + item.minPhysicalDamage }} ){% endif %}</td>
+
+        <td>
+            {% if item.minFireDamage %}
+                <small class="text-error">{% if item.minFireDamage %}{{ item.minFireDamage }}-{{ item.maxFireDamage }} ( ~{{ (item.maxFireDamage - item.minFireDamage) / 2 + item.minFireDamage }} ){% endif %}</small>
+                {% if item.minColdDamage or item.minLightningDamage %}<br>{% endif %}
+            {% endif %}
+            {% if item.minColdDamage %}
+                <small class="text-info">{% if item.minColdDamage %}{{ item.minColdDamage }}-{{ item.maxColdDamage }} ( ~{{ (item.maxColdDamage - item.minColdDamage) / 2 + item.minColdDamage }} ){% endif %}</small>
+                {% if item.minLightningDamage %}<br>{% endif %}
+            {% endif %}
+            {% if item.minLightningDamage %}
+                <small class="text-warning">{% if item.minLightningDamage %}{{ item.minLightningDamage }}-{{ item.maxLightningDamage }} ( ~{{ (item.maxLightningDamage - item.minLightningDamage) / 2 + item.minLightningDamage }} ){% endif %}</small>
+            {% endif %}
+        </td>
+
+        <td class="alert-error">{{ item.armour }}</td>
+        <td class="alert-success">{{ item.evasionRating }}</td>
+        <td class="alert-info">{{ item.energyShield }}</td>
     </tr>
 {% endfor %}
 </table>

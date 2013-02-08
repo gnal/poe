@@ -10,6 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Item
 {
+    const LEAGUE_HARDCORE = 0;
+
+    const LEAGUE_DEFAULT = 1;
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -43,9 +47,59 @@ class Item
     protected $maxPhysicalDamage;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $minFireDamage;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $maxFireDamage;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $minColdDamage;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $maxColdDamage;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $minLightningDamage;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $maxLightningDamage;
+
+    /**
      * @ORM\Column(type="decimal", scale=2, nullable=true)
      */
     protected $criticalStrikeChance;
+
+    /**
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     */
+    protected $attacksPerSecond;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $armour;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $evasionRating;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $energyShield;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -101,6 +155,143 @@ class Item
      * @ORM\Column(type="integer")
      */
     protected $threadId;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $mapLvl;
+
+    public function getMapLvl()
+    {
+        return $this->mapLvl;
+    }
+
+    public function setMapLvl($mapLvl)
+    {
+        $this->mapLvl = $mapLvl;
+
+        return $this;
+    }
+
+    public function getMinFireDamage()
+    {
+        return $this->minFireDamage;
+    }
+
+    public function setMinFireDamage($minFireDamage)
+    {
+        $this->minFireDamage = $minFireDamage;
+
+        return $this;
+    }
+
+    public function getMaxFireDamage()
+    {
+        return $this->maxFireDamage;
+    }
+
+    public function setMaxFireDamage($maxFireDamage)
+    {
+        $this->maxFireDamage = $maxFireDamage;
+
+        return $this;
+    }
+
+    public function getMinColdDamage()
+    {
+        return $this->minColdDamage;
+    }
+
+    public function setMinColdDamage($minColdDamage)
+    {
+        $this->minColdDamage = $minColdDamage;
+
+        return $this;
+    }
+
+    public function getMaxColdDamage()
+    {
+        return $this->maxColdDamage;
+    }
+
+    public function setMaxColdDamage($maxColdDamage)
+    {
+        $this->maxColdDamage = $maxColdDamage;
+
+        return $this;
+    }
+
+    public function getMinLightningDamage()
+    {
+        return $this->minLightningDamage;
+    }
+
+    public function setMinLightningDamage($minLightningDamage)
+    {
+        $this->minLightningDamage = $minLightningDamage;
+
+        return $this;
+    }
+
+    public function getMaxLightningDamage()
+    {
+        return $this->maxLightningDamage;
+    }
+
+    public function setMaxLightningDamage($maxLightningDamage)
+    {
+        $this->maxLightningDamage = $maxLightningDamage;
+
+        return $this;
+    }
+
+    public function getAttacksPerSecond()
+    {
+        return $this->attacksPerSecond;
+    }
+
+    public function setAttacksPerSecond($attacksPerSecond)
+    {
+        $this->attacksPerSecond = $attacksPerSecond;
+
+        return $this;
+    }
+
+    public function getArmour()
+    {
+        return $this->armour;
+    }
+
+    public function setArmour($armour)
+    {
+        $this->armour = $armour;
+
+        return $this;
+    }
+
+    public function getEvasionRating()
+    {
+        return $this->evasionRating;
+    }
+
+    public function setEvasionRating($evasionRating)
+    {
+        $this->evasionRating = $evasionRating;
+
+        return $this;
+    }
+
+    public function getEnergyShield()
+    {
+        return $this->energyShield;
+    }
+
+    public function setEnergyShield($energyShield)
+    {
+        $this->energyShield = $energyShield;
+
+        return $this;
+    }
 
     public function getCriticalStrikeChance()
     {
