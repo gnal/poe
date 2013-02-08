@@ -18,8 +18,8 @@
 <table class="table table-bordered">
     <tr>
         <th>Type</th>
-        <th>Quality</th>
-        <th>Physical Damage</th>
+        <th class="span1">Quality</th>
+        <th class="span2">Physical Damage</th>
         <th>Account Name</th>
     </tr>
 {% for item in items %}
@@ -35,7 +35,7 @@
             </small>
         </td>
         <td>{% if item.quality %}{{ item.quality }}%{% endif %}</td>
-        <td>{{ item.minPhysicalDamage }}-{{ item.maxPhysicalDamage }}</td>
+        <td>{% if item.minPhysicalDamage %}{{ item.minPhysicalDamage }}-{{ item.maxPhysicalDamage }}{% endif %}</td>
         <td>{{ item.accountName }}</td>
     </tr>
 {% endfor %}
