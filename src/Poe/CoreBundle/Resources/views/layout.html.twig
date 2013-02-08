@@ -1,0 +1,35 @@
+{% extends 'MsiCmfBundle:Page:layout.html.twig' %}
+
+{% block brand %}PoE{% endblock brand %}
+
+{% block css %}
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap.min.css" rel="stylesheet">
+<style type="text/css">
+html {
+    overflow-y: scroll;
+}
+.table th,
+.table td {
+    vertical-align: middle;
+}
+</style>
+{{ parent() }}
+{% endblock css %}
+
+{% block js %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+{{ parent() }}
+{% endblock js %}
+
+{% block body %}
+<div class="container">
+    {% for key, message in app.session.flashbag.all() %}
+    <div class="alert alert-{{ key }} fade in">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {{ block('page_content') }}
+</div>
+{% endblock body %}

@@ -1,0 +1,43 @@
+{% extends 'PoeCoreBundle::layout.html.twig' %}
+
+{% block content %}
+<form method=GET action="{{ path('poe_core_item_search') }}">
+    <label>League</label>
+    <select name="league">
+        <option value="Default">Default</option>
+        <option value="Hardcore">Hardcore</option>
+    </select>
+
+    <div class="form-actions">
+        <button class="btn" type=submit>Search</button>
+    </div>
+</form>
+
+<h3>Results <small class="muted">( {{ items|length }} )</small></h3>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Type</th>
+        <th>Quality</th>
+        <th>Physical Damage</th>
+        <th>Account Name</th>
+    </tr>
+{% for item in items %}
+    <tr>
+        <td>
+            <a target="_blank" href="{{ item.thread }}">{% if item.type.parent %}{{ item.type.parent }} <i class="icon-chevron-right"></i> {% endif %}{{ item.type }}</a>
+            <br>
+            <small>
+                <span class="muted">Lvl: {{ item.lvlReq }}</span>
+                {% if item.strReq %}<span class="text-error">Str: 11</span>{% endif %}
+                {% if item.dexReq %}<span class="text-success">Dex: 11</span>{% endif %}
+                {% if item.intReq %}<span class="text-info">Int: 11</span>{% endif %}
+            </small>
+        </td>
+        <td>{% if item.quality %}{{ item.quality }}%{% endif %}</td>
+        <td>{{ item.minPhysicalDamage }}-{{ item.maxPhysicalDamage }}</td>
+        <td>{{ item.accountName }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock content %}
