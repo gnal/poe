@@ -47,7 +47,7 @@ class CrawlCommand extends ContainerAwareCommand
     protected function process($output)
     {
         // $ch = curl_init();
-        // curl_setopt($ch, CURLOPT_URL, 'http://www.pathofexile.com/forum/view-thread/100104');
+        // curl_setopt($ch, CURLOPT_URL, 'http://www.pathofexile.com/forum/view-thread/100118');
         // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         // $html = curl_exec($ch);
         // curl_close($ch);
@@ -70,7 +70,7 @@ class CrawlCommand extends ContainerAwareCommand
         // ----------------- //
 
         $l = 1;
-        for ($j=100111; $j < 100122; $j++) {
+        for ($j=100122; $j < 100133; $j++) {
             $url = 'http://www.pathofexile.com/forum/view-thread/'.$j;
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -126,6 +126,34 @@ class CrawlCommand extends ContainerAwareCommand
 
                     $type->setName($row['typeLine']);
                 }
+                if (!$type->getParent()) {
+                    if (preg_match('#\sRing$#', $row['typeLine'])) {
+                        $parentType = $this->itemTypeManager->getFindByQueryBuilder(['a.name' => 'Ring'])->getQuery()->getOneOrNullResult();
+
+                        if (!$parentType) {
+                            $parentType = $this->itemTypeManager->create();
+
+                            $parentType->setName('Ring');
+
+                            $this->itemTypeManager->update($parentType);
+                        }
+
+                        $type->setParent($parentType);
+                    }
+                    if (preg_match('#\sAmulet$#', $row['typeLine'])) {
+                        $parentType = $this->itemTypeManager->getFindByQueryBuilder(['a.name' => 'Amulet'])->getQuery()->getOneOrNullResult();
+
+                        if (!$parentType) {
+                            $parentType = $this->itemTypeManager->create();
+
+                            $parentType->setName('Amulet');
+
+                            $this->itemTypeManager->update($parentType);
+                        }
+
+                        $type->setParent($parentType);
+                    }
+                }
 
                 // requirements
                 if (isset($row['requirements'])) {
@@ -160,15 +188,19 @@ class CrawlCommand extends ContainerAwareCommand
                         if ($property['name'] === 'Quality') {
                             $item->setQuality(str_replace('%', '', $property['values'][0][0]));
                         }
-                        if (!$type->getId()) {
+                        if (!$type->getParent()) {
                             if (in_array($property['name'], $this->parentTypes)) {
-                                $newParentType = $this->itemTypeManager->create();
+                                $parentType = $this->itemTypeManager->getFindByQueryBuilder(['a.name' => array_search($property['name'], $this->parentTypes)])->getQuery()->getOneOrNullResult();
 
-                                $newParentType->setName(array_search($property['name'], $this->parentTypes));
+                                if (!$parentType) {
+                                    $parentType = $this->itemTypeManager->create();
 
-                                $this->itemTypeManager->update($newParentType);
+                                    $parentType->setName(array_search($property['name'], $this->parentTypes));
 
-                                $type->setParent($newParentType);
+                                    $this->itemTypeManager->update($parentType);
+                                }
+
+                                $type->setParent($parentType);
                             }
                         }
                     }
