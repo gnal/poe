@@ -88,13 +88,13 @@ class CrawlCommand extends ContainerAwareCommand
     {
         $data = $this->getJson($id);
 
-        die(print_r($data[2]));
+        die(print_r($data[0]));
     }
 
     protected function process()
     {
         $l = 1;
-        for ($id=110579; $id < 110589; $id++) {
+        for ($id=110622; $id < 110644; $id++) {
             $data = $this->getJson($id);
 
             if (!$data) {
@@ -107,7 +107,7 @@ class CrawlCommand extends ContainerAwareCommand
                 $row = $v[1];
 
                 if (!$row['verified']) {
-                    continue;
+                    // continue;
                 }
 
                 $item = $this->itemManager->create();
@@ -115,7 +115,7 @@ class CrawlCommand extends ContainerAwareCommand
                 $item
                     ->setName($row['name'])
                     ->setVerified($row['verified'])
-                    ->setIcon($row['icon'])
+                    ->setFrameType($row['frameType'])
                     ->setSockets('dada')
                     ->setIdentified($row['identified'])
                     ->setAccountName($this->crawler->filter('a.profile-link.post_by_account')->text())
@@ -221,6 +221,11 @@ class CrawlCommand extends ContainerAwareCommand
                 }
 
                 $item->setType($type);
+
+                if ($dps = $item->calcDps()) {
+                    $item->setDps($dps);
+                }
+
                 $this->itemManager->updateBatch($item, $i);
 
                 $label = $row['name'] ?: $row['typeLine'];

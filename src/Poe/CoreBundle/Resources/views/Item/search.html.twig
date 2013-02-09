@@ -2,23 +2,18 @@
 
 {% block content %}
 <form method=GET action="{{ path('poe_core_item_search') }}">
-    <label>League</label>
-    <select name="league">
-        <option value="Default">Default</option>
-        <option value="Hardcore">Hardcore</option>
-    </select>
+    {{ form_widget(form) }}
 
-    <div class="form-actions">
-        <button class="btn" type=submit>Search</button>
-    </div>
+    <button class="btn btn-danger" type=submit>Search</button>
 </form>
 
-<h3>Results <small class="muted">( {{ items|length }} )</small></h3>
+<h3>Results <small class="muted">( {{ pager.count|number_format }} )</small></h3>
 
-<table class="table table-bordered">
+{{ msi_pager_render(pager) }}
+<table class="table table-striped">
     <tr>
-        <th>Type</th>
-        <th class="span1">Quality</th>
+        <th class="span4">Item</th>
+        <th class="span1">DPS</th>
         <th class="span2">Physical</th>
         <th class="span2">Elemental</th>
         <th class="span1">Armour</th>
@@ -28,11 +23,12 @@
 {% for item in items %}
     <tr>
         <td>
-            {% if item.type.parent %}
-                {{ item.type.parent }}
-                <i class="icon-chevron-right"></i>
-            {% endif %}
-            <a target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">{{ item.type }}</a>
+            <a class="text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
+                {{ item.name ?: item.type }}
+            </a>
+            <br>
+            <small>{{ item.name ? item.type : item.type.parent }}</small>
+            {% if item.type.parent.name == 'Gem' and item.quality %}( {{ item.quality }}% ){% endif %}
             <br>
             <small>
                 Req:
@@ -42,9 +38,8 @@
                 {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
             </small>
         </td>
-        <td>{% if item.quality %}{{ item.quality }}%{% endif %}</td>
-        <td>{% if item.minPhysicalDamage %}{{ item.minPhysicalDamage }}-{{ item.maxPhysicalDamage }} ( ~{{ (item.maxPhysicalDamage - item.minPhysicalDamage) / 2 + item.minPhysicalDamage }} ){% endif %}</td>
-
+        <td>{{ item.dps|number_format(1) }}</td>
+        <td>{% if item.minPhysicalDamage %}{{ item.minPhysicalDamage }}-{{ item.maxPhysicalDamage }}{% endif %}</td>
         <td>
             {% if item.minFireDamage %}
                 <small class="text-error">{% if item.minFireDamage %}{{ item.minFireDamage }}-{{ item.maxFireDamage }} ( ~{{ (item.maxFireDamage - item.minFireDamage) / 2 + item.minFireDamage }} ){% endif %}</small>
@@ -58,11 +53,11 @@
                 <small class="text-warning">{% if item.minLightningDamage %}{{ item.minLightningDamage }}-{{ item.maxLightningDamage }} ( ~{{ (item.maxLightningDamage - item.minLightningDamage) / 2 + item.minLightningDamage }} ){% endif %}</small>
             {% endif %}
         </td>
-
-        <td class="alert-error">{{ item.armour }}</td>
-        <td class="alert-success">{{ item.evasionRating }}</td>
-        <td class="alert-info">{{ item.energyShield }}</td>
+        <td>{{ item.armour }}</td>
+        <td>{{ item.evasionRating }}</td>
+        <td>{{ item.energyShield }}</td>
     </tr>
 {% endfor %}
 </table>
+{{ msi_pager_render(pager) }}
 {% endblock content %}

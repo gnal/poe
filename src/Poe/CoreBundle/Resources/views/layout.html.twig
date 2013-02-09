@@ -3,14 +3,54 @@
 {% block brand %}PoE{% endblock brand %}
 
 {% block css %}
-<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
 html {
     overflow-y: scroll;
 }
+body {
+    background: #0f0f0f;
+    color: #a38d6d;
+}
+a {
+    color: #88f;
+}
+a:hover {
+    text-decoration: none;
+    color: #88f;
+}
+.table {
+    border: 1px solid #333;
+}
 .table th,
 .table td {
     vertical-align: middle;
+    border-color: #333;
+}
+.table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
+    background-color: #1a1b18;
+}
+.text-frame-type-0 {
+    color: #c8c8c8;
+}
+.text-frame-type-1 {
+    color: #88f;
+}
+.text-frame-type-2 {
+    color: #ff7;
+}
+.text-frame-type-3 {
+    color: #af6025;
+}
+.text-frame-type-4 {
+    color: #1ba29b;
+}
+.pagination ul > li > a, .pagination ul > li > span {
+    border-color: #333;
+    background-color: #0f0f0f;
+}
+.pagination ul > li > a:hover, .pagination ul > li > a:focus, .pagination ul > .active > a, .pagination ul > .active > span {
+    background-color: #1a1b18;
 }
 </style>
 {{ parent() }}
@@ -18,7 +58,7 @@ html {
 
 {% block js %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
 {{ parent() }}
 {% endblock js %}
 

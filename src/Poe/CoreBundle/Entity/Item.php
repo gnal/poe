@@ -14,6 +14,10 @@ class Item
 
     const LEAGUE_DEFAULT = 1;
 
+    const FRAME_TYPE_RARE = 2;
+
+    const FRAME_TYPE_UNIQUE = 3;
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -35,6 +39,11 @@ class Item
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $quality;
+
+    /**
+     * @ORM\Column(type="decimal", scale=1, nullable=true)
+     */
+    protected $dps;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -127,9 +136,9 @@ class Item
     protected $verified;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      */
-    protected $icon;
+    protected $frameType;
 
     /**
      * @ORM\Column(type="integer")
@@ -160,6 +169,34 @@ class Item
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $mapLvl;
+
+    public function calcDps()
+    {
+        $averagePhysicalDamage =  $this->calcAverageDamage($this->minPhysicalDamage, $this->maxPhysicalDamage);
+        $averageFireDamage =      $this->calcAverageDamage($this->minFireDamage, $this->maxFireDamage);
+        $averageColdDamage =      $this->calcAverageDamage($this->minColdDamage, $this->maxColdDamage);
+        $averageLightningDamage = $this->calcAverageDamage($this->minLightningDamage, $this->maxLightningDamage);
+
+        $combinedAverageDamage = $averagePhysicalDamage + $averageFireDamage + $averageColdDamage + $averageLightningDamage;
+
+        $crit = 1 + $this->criticalStrikeChance / 100;
+
+        $dps = $this->attacksPerSecond * $combinedAverageDamage * $crit;
+
+        return $dps;
+    }
+
+    public function getDps()
+    {
+        return $this->dps;
+    }
+
+    public function setDps($dps)
+    {
+        $this->dps = $dps;
+
+        return $this;
+    }
 
     public function getMapLvl()
     {
@@ -401,18 +438,6 @@ class Item
         return $this;
     }
 
-    public function getIcon()
-    {
-        return $this->icon;
-    }
-
-    public function setIcon($icon)
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }
-
     public function getLeague()
     {
         return $this->league;
@@ -500,5 +525,27 @@ class Item
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getFrameType()
+    {
+        return $this->frameType;
+    }
+
+    public function setFrameType($frameType)
+    {
+        $this->frameType = $frameType;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->type;
+    }
+
+    private function calcAverageDamage($min, $max)
+    {
+        return ($max - $min) / 2 + $min;
     }
 }

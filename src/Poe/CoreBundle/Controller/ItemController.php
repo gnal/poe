@@ -4,10 +4,14 @@ namespace Poe\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Poe\CoreBundle\Form\Type\SearchFormType;
+
 class ItemController extends Controller
 {
     public function searchAction()
     {
+        $form = $this->get('form.factory')->create(new SearchFormType());
+
         $q = $this->getRequest()->query->get('q');
 
         $qb = $this->get('poe_core.item_manager')->getSearchQueryBuilder(
@@ -15,15 +19,19 @@ class ItemController extends Controller
             ['a.name'],
             [],
             ['a.type' => 't', 't.parent' => 'tp'],
-            ['tp.name' => 'ASC', 'a.lvlReq' => 'ASC']
+            // ['tp.name' => 'ASC', 'a.lvlReq' => 'ASC']
+            ['a.dps' => 'DESC']
         );
 
-        if ($league = $this->getRequest()->query->get('league')) {
+        if (null !== $league = $this->getRequest()->query->get('league')) {
             $qb->andWhere('a.league = :league')->setParameter('league', $league);
         }
 
-        $items = $qb->getQuery()->execute();
+        $pager = $this->get('msi_cmf.pager.factory')->create($qb);
+        $pager->paginate($this->getRequest()->query->get('page', 1), 10);
 
-        return $this->render('PoeCoreBundle:Item:search.html.twig', ['items' => $items]);
+        $items = $pager->getIterator()->getArrayCopy();
+
+        return $this->render('PoeCoreBundle:Item:search.html.twig', ['pager' => $pager, 'form' => $form->createView(), 'items' => $items]);
     }
 }
