@@ -166,6 +166,60 @@ class CrawlCommand extends ContainerAwareCommand
                         if (preg_match('@([0-9]+)% increased Stun Duration on enemies@', $mod, $matches)) {
                             $item->setIncreasedStunDuration($matches[1]);
                         }
+                        if (preg_match('@([0-9]+) to Intelligence@', $mod, $matches)) {
+                            $item->setInt($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+) to Dexterity@', $mod, $matches)) {
+                            $item->setDex($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+) to Strength@', $mod, $matches)) {
+                            $item->setStr($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% increased Attack Speed@', $mod, $matches)) {
+                            $item->setIncreasedAttackSpeed($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% increased Cast Speed@', $mod, $matches)) {
+                            $item->setIncreasedCastSpeed($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+) Mana Gained when you Kill an enemy@', $mod, $matches)) {
+                            $item->setManaOnKill($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+) Life Gained when you Kill an enemy@', $mod, $matches)) {
+                            $item->setLifeOnKill($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% increased Elemental Damage with Weapons@', $mod, $matches)) {
+                            $item->setIncreasedElementalDamageWeapons($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+) to Accuracy Rating@', $mod, $matches)) {
+                            $item->setAccuracyRating($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% of Physical Attack Damage Leeched back as Life@', $mod, $matches)) {
+                            $item->setLifeLeech($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% of Physical Attack Damage Leeched back as Mana@', $mod, $matches)) {
+                            $item->setManaLeech($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% to Chaos Resist@', $mod, $matches)) {
+                            $item->setChaosResist($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% to Cold Resistance@', $mod, $matches)) {
+                            $item->setColdResist($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% to Lightning Resistance@', $mod, $matches)) {
+                            $item->setLightningResist($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% to Fire Resistance@', $mod, $matches)) {
+                            $item->setFireResist($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% reduced Enemy Stun Threshold@', $mod, $matches)) {
+                            $item->setReducedStunThreshold($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+) Life gained for each enemy hit by your Attacks@', $mod, $matches)) {
+                            $item->setLifeOnHit($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+) to maximum Energy Shield@', $mod, $matches)) {
+                            $item->setMaxEnergyShield($matches[1]);
+                        }
                     }
                 }
 

@@ -25,6 +25,24 @@ class SearchFormType extends AbstractType
         $mod = [
             'increasedPhysicalDamage' => '+% Physical Dmg',
             'increasedStunDuration' => '+% Stun Duration',
+            'int' => '+ Int',
+            'dex' => '+ Dex',
+            'str' => '+ Str',
+            'increasedAttackSpeed' => '+% Attack Speed',
+            'increasedCastSpeed' => '+% Cast Speed',
+            'manaOnKill' => '+ Mana on Kill',
+            'lifeOnKill' => '+ Life on Kill',
+            'increasedElementalDamageWeapons' => '+% Elemental Dmg',
+            'accuracyRating' => '+ Accuracy Rating',
+            'lifeLeech' => '+% Life Leech',
+            'manaLeech' => '+% Mana Leech',
+            'chaosResist' => '+% Chaos Resist',
+            'coldResist' => '+% Cold Resist',
+            'lightningResist' => '+% Lightning Resist',
+            'fireResist' => '+% Fire Resist',
+            'reducedStunThreshold' => '+% Reduced Stun Threshold',
+            'lifeOnHit' => '+ Life on Hit',
+            'maxEnergyShield' => '+ Max Energy Shield',
         ];
 
         $builder

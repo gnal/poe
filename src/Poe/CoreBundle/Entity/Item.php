@@ -211,6 +211,97 @@ class Item
      */
     protected $increasedStunDuration;
 
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $int;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $dex;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $str;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $increasedAttackSpeed;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $increasedCastSpeed;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $manaOnKill;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $lifeOnKill;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $increasedElementalDamageWeapons;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $accuracyRating;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $lifeLeech;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $manaLeech;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $chaosResist;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $coldResist;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $lightningResist;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $fireResist;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $reducedStunThreshold;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $lifeOnHit;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $maxEnergyShield;
+
     public function calcDps()
     {
         $combinedAverageDamage = $this->calcAveragePhysicalDamage() + $this->calcAverageFireDamage() + $this->calcAverageColdDamage() + $this->calcAverageLightningDamage();
@@ -240,6 +331,222 @@ class Item
     public function calcAverageLightningDamage()
     {
         return $this->calcAverageDamage($this->minLightningDamage, $this->maxLightningDamage);
+    }
+
+    public function getInt()
+    {
+        return $this->int;
+    }
+
+    public function setInt($int)
+    {
+        $this->int = $int;
+
+        return $this;
+    }
+
+    public function getDex()
+    {
+        return $this->dex;
+    }
+
+    public function setDex($dex)
+    {
+        $this->dex = $dex;
+
+        return $this;
+    }
+
+    public function getStr()
+    {
+        return $this->str;
+    }
+
+    public function setStr($str)
+    {
+        $this->str = $str;
+
+        return $this;
+    }
+
+    public function getIncreasedAttackSpeed()
+    {
+        return $this->increasedAttackSpeed;
+    }
+
+    public function setIncreasedAttackSpeed($increasedAttackSpeed)
+    {
+        $this->increasedAttackSpeed = $increasedAttackSpeed;
+
+        return $this;
+    }
+
+    public function getIncreasedCastSpeed()
+    {
+        return $this->increasedCastSpeed;
+    }
+
+    public function setIncreasedCastSpeed($increasedCastSpeed)
+    {
+        $this->increasedCastSpeed = $increasedCastSpeed;
+
+        return $this;
+    }
+
+    public function getManaOnKill()
+    {
+        return $this->manaOnKill;
+    }
+
+    public function setManaOnKill($manaOnKill)
+    {
+        $this->manaOnKill = $manaOnKill;
+
+        return $this;
+    }
+
+    public function getLifeOnKill()
+    {
+        return $this->lifeOnKill;
+    }
+
+    public function setLifeOnKill($lifeOnKill)
+    {
+        $this->lifeOnKill = $lifeOnKill;
+
+        return $this;
+    }
+
+    public function getIncreasedElementalDamageWeapons()
+    {
+        return $this->increasedElementalDamageWeapons;
+    }
+
+    public function setIncreasedElementalDamageWeapons($increasedElementalDamageWeapons)
+    {
+        $this->increasedElementalDamageWeapons = $increasedElementalDamageWeapons;
+
+        return $this;
+    }
+
+    public function getAccuracyRating()
+    {
+        return $this->accuracyRating;
+    }
+
+    public function setAccuracyRating($accuracyRating)
+    {
+        $this->accuracyRating = $accuracyRating;
+
+        return $this;
+    }
+
+    public function getLifeLeech()
+    {
+        return $this->lifeLeech;
+    }
+
+    public function setLifeLeech($lifeLeech)
+    {
+        $this->lifeLeech = $lifeLeech;
+
+        return $this;
+    }
+
+    public function getManaLeech()
+    {
+        return $this->manaLeech;
+    }
+
+    public function setManaLeech($manaLeech)
+    {
+        $this->manaLeech = $manaLeech;
+
+        return $this;
+    }
+
+    public function getChaosResist()
+    {
+        return $this->chaosResist;
+    }
+
+    public function setChaosResist($chaosResist)
+    {
+        $this->chaosResist = $chaosResist;
+
+        return $this;
+    }
+
+    public function getColdResist()
+    {
+        return $this->coldResist;
+    }
+
+    public function setColdResist($coldResist)
+    {
+        $this->coldResist = $coldResist;
+
+        return $this;
+    }
+
+    public function getLightningResist()
+    {
+        return $this->lightningResist;
+    }
+
+    public function setLightningResist($lightningResist)
+    {
+        $this->lightningResist = $lightningResist;
+
+        return $this;
+    }
+
+    public function getFireResist()
+    {
+        return $this->fireResist;
+    }
+
+    public function setFireResist($fireResist)
+    {
+        $this->fireResist = $fireResist;
+
+        return $this;
+    }
+
+    public function getReducedStunThreshold()
+    {
+        return $this->reducedStunThreshold;
+    }
+
+    public function setReducedStunThreshold($reducedStunThreshold)
+    {
+        $this->reducedStunThreshold = $reducedStunThreshold;
+
+        return $this;
+    }
+
+    public function getLifeOnHit()
+    {
+        return $this->lifeOnHit;
+    }
+
+    public function setLifeOnHit($lifeOnHit)
+    {
+        $this->lifeOnHit = $lifeOnHit;
+
+        return $this;
+    }
+
+    public function getMaxEnergyShield()
+    {
+        return $this->maxEnergyShield;
+    }
+
+    public function setMaxEnergyShield($maxEnergyShield)
+    {
+        $this->maxEnergyShield = $maxEnergyShield;
+
+        return $this;
     }
 
     public function getIncreasedPhysicalDamage()
