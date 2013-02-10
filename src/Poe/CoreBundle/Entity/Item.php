@@ -197,11 +197,6 @@ class Item
     protected $mapLvl;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    protected $json;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $increasedPhysicalDamage;
@@ -574,18 +569,6 @@ class Item
     public function setIncreasedStunDuration($increasedStunDuration)
     {
         $this->increasedStunDuration = $increasedStunDuration;
-
-        return $this;
-    }
-
-    public function getJson()
-    {
-        return $this->json;
-    }
-
-    public function setJson($json)
-    {
-        $this->json = $json;
 
         return $this;
     }

@@ -93,7 +93,7 @@ class CrawlCommand extends ContainerAwareCommand
 
     protected function process()
     {
-        for ($page=2; $page < 5; $page++) {
+        for ($page=6; $page < 7; $page++) {
             $hrefs = $this->getForumThreads(306, $page);
 
             foreach ($hrefs as $href) {
@@ -132,7 +132,6 @@ class CrawlCommand extends ContainerAwareCommand
                         ->setIdentified($row['identified'])
                         ->setAccountName($this->crawler->filter('a.profile-link.post_by_account')->text())
                         ->setThreadId($threadId)
-                        ->setJson(json_encode($v))
                         // ->setEditedAt($this->crawler->filter('div.last_edited_by')->text())
                     ;
 
