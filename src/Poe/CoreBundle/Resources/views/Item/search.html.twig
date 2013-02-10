@@ -22,15 +22,16 @@
             <div class="row">
                 <div class="span2" style="width: 150px;">
                     <p><small>Property</small></p>
+                    {{ form_errors(form.prop1) }}
                     {{ form_widget(form.prop1) }}
                     {{ form_widget(form.prop2) }}
                     {{ form_widget(form.prop3) }}
                 </div>
                 <div class="span1" style="width: 50px;">
                     <p><small>Min</small></p>
-                    {{ form_widget(form.prop1val) }}
-                    {{ form_widget(form.prop2val) }}
-                    {{ form_widget(form.prop3val) }}
+                    <div class="poe_search_prop1_chzn">{{ form_widget(form.prop1val) }}</div>
+                    <div class="poe_search_prop2_chzn">{{ form_widget(form.prop2val) }}</div>
+                    <div class="poe_search_prop3_chzn">{{ form_widget(form.prop3val) }}</div>
                 </div>
             </div>
 
@@ -46,12 +47,12 @@
                 </div>
                 <div class="span1" style="width: 50px;">
                     <p><small>Min</small></p>
-                    {{ form_widget(form.mod1val) }}
-                    {{ form_widget(form.mod2val) }}
-                    {{ form_widget(form.mod3val) }}
-                    {{ form_widget(form.mod4val) }}
-                    {{ form_widget(form.mod5val) }}
-                    {{ form_widget(form.mod6val) }}
+                    <div class="poe_search_mod1_chzn">{{ form_widget(form.mod1val) }}</div>
+                    <div class="poe_search_mod2_chzn">{{ form_widget(form.mod2val) }}</div>
+                    <div class="poe_search_mod3_chzn">{{ form_widget(form.mod3val) }}</div>
+                    <div class="poe_search_mod4_chzn">{{ form_widget(form.mod4val) }}</div>
+                    <div class="poe_search_mod5_chzn">{{ form_widget(form.mod5val) }}</div>
+                    <div class="poe_search_mod6_chzn">{{ form_widget(form.mod6val) }}</div>
                 </div>
             </div>
 
@@ -63,7 +64,7 @@
     <div class="span9">
         <h3>Results</h3>
 
-        {{ msi_pager_render(pager) }}
+        {% if items|length %}
         <table class="table table-bordered">
             <tr>
                 <th>Item</th>
@@ -80,13 +81,7 @@
                     <a class="item text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
                         {{ item.name ?: item.type }}
                     </a>
-                    <br>
-                    <small>{{ item.name ? item.type : item.type.parent }}</small>
-                    {% if item.type.parent %}
-                    {% else %}
-                    has no parent {{ item.frameType }}
-                    {% endif %}
-                    {% if item.type.parent and item.type.parent.name == 'Gem' and item.quality %}( {{ item.quality }}% ){% endif %}
+                    {#<small>{{ item.name ? item.type : item.type.parent }}</small>#}
                     <br>
                     <small>
                         Req:
@@ -124,6 +119,9 @@
         {% endfor %}
         </table>
         {{ msi_pager_render(pager) }}
+        {% else %}
+        Nothing was found.
+        {% endif %}
     </div>
 </div>
 {% endblock content %}
@@ -161,5 +159,11 @@
         html: true,
         animation: false
     })
+    $('.chzn-container-single .chzn-single').on('mousedown', function(evt) {
+        if ($(evt.target).hasClass("search-choice-close")) {
+            var id = $(this).closest('div').attr('id');
+            $('div.'+id).children('input').attr('value', '');
+        }
+    });
 </script>
 {% endblock js %}

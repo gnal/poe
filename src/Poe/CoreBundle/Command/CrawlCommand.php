@@ -94,7 +94,7 @@ class CrawlCommand extends ContainerAwareCommand
     protected function process()
     {
         $l = 1;
-        for ($id=110639; $id < 110659; $id++) {
+        for ($id=110700; $id < 110720; $id++) {
             $data = $this->getJson($id);
 
             if (!$data) {

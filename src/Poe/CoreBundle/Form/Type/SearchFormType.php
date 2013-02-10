@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Constraints\MinLength;
+use Symfony\Component\Validator\Constraints\Choice;
 
 use Poe\CoreBundle\Entity\Item;
 
@@ -15,6 +16,38 @@ class SearchFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $validPropChoices = [
+            'averagePhysicalDamage',
+            'criticalStrikeChance',
+            'attacksPerSecond',
+            'armour',
+            'evasionRating',
+            'energyShield',
+        ];
+
+        $validModChoices = [
+            'increasedPhysicalDamage',
+            'increasedStunDuration',
+            'intelligence',
+            'dexterity',
+            'strength',
+            'increasedAttackSpeed',
+            'increasedCastSpeed',
+            'manaOnKill',
+            'lifeOnKill',
+            'increasedElementalDamageWeapons',
+            'accuracyRating',
+            'lifeLeech',
+            'manaLeech',
+            'chaosResist',
+            'coldResist',
+            'lightningResist',
+            'fireResist',
+            'reducedStunThreshold',
+            'lifeOnHit',
+            'maxEnergyShield',
+        ];
+
         $prop = [
             'averagePhysicalDamage' => 'Avg Physical Dmg',
             'criticalStrikeChance' => 'Crit Strike Chance',
@@ -81,6 +114,7 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('prop1', 'choice', [
+                'constraints' => [new Choice(['choices' => $validPropChoices])],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $prop,
@@ -92,6 +126,7 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('prop2', 'choice', [
+                'constraints' => [new Choice(['choices' => $validPropChoices])],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $prop,
@@ -103,6 +138,7 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('prop3', 'choice', [
+                'constraints' => [new Choice(['choices' => $validPropChoices])],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $prop,
@@ -114,6 +150,7 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('mod1', 'choice', [
+                'constraints' => [new Choice(['choices' => $validModChoices])],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
@@ -125,6 +162,7 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('mod2', 'choice', [
+                'constraints' => [new Choice(['choices' => $validModChoices])],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
@@ -136,6 +174,7 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('mod3', 'choice', [
+                'constraints' => [new Choice(['choices' => $validModChoices])],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
@@ -147,6 +186,7 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('mod4', 'choice', [
+                'constraints' => [new Choice(['choices' => $validModChoices])],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
@@ -158,6 +198,7 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('mod5', 'choice', [
+                'constraints' => [new Choice(['choices' => $validModChoices])],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
@@ -169,6 +210,7 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('mod6', 'choice', [
+                'constraints' => [new Choice(['choices' => $validModChoices])],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
