@@ -93,7 +93,7 @@ class CrawlCommand extends ContainerAwareCommand
 
     protected function process()
     {
-        for ($page=1; $page < 2; $page++) {
+        for ($page=2; $page < 5; $page++) {
             $hrefs = $this->getForumThreads(306, $page);
 
             foreach ($hrefs as $href) {
@@ -126,7 +126,6 @@ class CrawlCommand extends ContainerAwareCommand
                     $item = $this->itemManager->create();
 
                     $item
-                        ->setName($row['name'])
                         ->setVerified($row['verified'])
                         ->setFrameType($row['frameType'])
                         ->setSockets('dada')
@@ -302,6 +301,8 @@ class CrawlCommand extends ContainerAwareCommand
                     }
 
                     $item->setType($type);
+
+                    $item->setName($row['name'] ?: $type->getName());
 
                     if ($dps = $item->calcDps()) {
                         $item->setDps($dps);
@@ -494,7 +495,7 @@ class CrawlCommand extends ContainerAwareCommand
             }
             $i++;
         }
-
+        $this->output->writeln(strlen($foo));
         $data = json_decode(utf8_encode($foo), true);
 
         return $data;

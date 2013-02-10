@@ -82,6 +82,9 @@ class SearchFormType extends AbstractType
 
         $builder
             ->  add('league', 'choice', [
+                'attr' => [
+                    'class' => 'all',
+                ],
                 'choices' => [
                     Item::LEAGUE_DEFAULT => 'Default',
                     Item::LEAGUE_HARDCORE => 'Hardcore',

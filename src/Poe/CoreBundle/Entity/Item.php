@@ -313,6 +313,11 @@ class Item
         return $dps;
     }
 
+    public function calcAverageElementalDamage()
+    {
+        return $this->calcAverageFireDamage() + $this->calcAverageColdDamage() + $this->calcAverageLightningDamage();
+    }
+
     public function calcAveragePhysicalDamage()
     {
         return $this->calcAverageDamage($this->minPhysicalDamage, $this->maxPhysicalDamage);

@@ -120,49 +120,60 @@
         }
     });
 
-    (function($) {
-        "use strict";
-
-        function getContent(url) {
-            $('#results').empty();
-            $.ajax(url, {
-                success: function(data) {
-                    $('#results').replaceWith(data);
-                    ready = true;
-                }
-            });
-        };
-
-        var ready = true;
-
-        $('div.container-fluid').on('click', 'div.pagination a', function(e) {
-            e.preventDefault();
-            ready = false;
-            getContent($(this).attr('href'));
-        });
-
-        $(window).on('keyup', function(e) {
-            e.preventDefault();
-            if ((e.which === 68 || e.which === 65) && ready === true) {
-                ready = false;
-                var $ul = $('.pagination ul');
-                var current = $ul.children('li.active').children().attr('href');
-
-                if (e.which === 68) {
-                    var url = $ul.children('li.active').next().children().attr('href');
-                    if (current === url) {
-                        url = $ul.children().first().next().children().attr('href');
-                    }
-                } else {
-                    var url = $ul.children('li.active').prev().children().attr('href');
-                    if (current === url) {
-                        url = $ul.children().last().prev().children().attr('href');
-                    }
-                }
-
-                getContent(url);
+    $('form').on('submit', function(e) {
+        e.preventDefault();
+        $('#results').empty();
+        $.ajax($(this).attr('action'), {
+            data: $(this).serialize(),
+            success: function(data) {
+                $('#results').replaceWith(data);
+                ready = true;
             }
         });
-    })(jQuery);
+    });
+    // (function($) {
+    //     "use strict";
+
+    //     function getContent(url) {
+    //         $('#results').empty();
+    //         $.ajax(url, {
+    //             success: function(data) {
+    //                 $('#results').replaceWith(data);
+    //                 ready = true;
+    //             }
+    //         });
+    //     };
+
+    //     var ready = true;
+
+    //     $('div.container-fluid').on('click', 'div.pagination a', function(e) {
+    //         e.preventDefault();
+    //         ready = false;
+    //         getContent($(this).attr('href'));
+    //     });
+
+    //     $(window).on('keyup', function(e) {
+    //         e.preventDefault();
+    //         if ((e.which === 68 || e.which === 65) && ready === true) {
+    //             ready = false;
+    //             var $ul = $('.pagination ul');
+    //             var current = $ul.children('li.active').children().attr('href');
+
+    //             if (e.which === 68) {
+    //                 var url = $ul.children('li.active').next().children().attr('href');
+    //                 if (current === url) {
+    //                     url = $ul.children().first().next().children().attr('href');
+    //                 }
+    //             } else {
+    //                 var url = $ul.children('li.active').prev().children().attr('href');
+    //                 if (current === url) {
+    //                     url = $ul.children().last().prev().children().attr('href');
+    //                 }
+    //             }
+
+    //             getContent(url);
+    //         }
+    //     });
+    // })(jQuery);
 </script>
 {% endblock js %}
