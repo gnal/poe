@@ -94,7 +94,7 @@ class CrawlCommand extends ContainerAwareCommand
     protected function process()
     {
         $l = 1;
-        for ($id=110622; $id < 110644; $id++) {
+        for ($id=110639; $id < 110659; $id++) {
             $data = $this->getJson($id);
 
             if (!$data) {
@@ -106,8 +106,11 @@ class CrawlCommand extends ContainerAwareCommand
             foreach ($data as $v) {
                 $row = $v[1];
 
-                if (!$row['verified']) {
-                    // continue;
+                if (
+                    !$row['verified'] ||
+                    $row['frameType'] == 5
+                ) {
+                    continue;
                 }
 
                 $item = $this->itemManager->create();
@@ -120,6 +123,7 @@ class CrawlCommand extends ContainerAwareCommand
                     ->setIdentified($row['identified'])
                     ->setAccountName($this->crawler->filter('a.profile-link.post_by_account')->text())
                     ->setThreadId($id)
+                    ->setJson(json_encode($v))
                 ;
 
                 // league
@@ -149,6 +153,18 @@ class CrawlCommand extends ContainerAwareCommand
                         }
                         if ($requirement['name'] === 'Int') {
                             $item->setIntReq($requirement['values'][0][0]);
+                        }
+                    }
+                }
+
+                // mods
+                if (isset($row['explicitMods'])) {
+                    foreach ($row['explicitMods'] as $mod) {
+                        if (preg_match('@([0-9]+)% increased Physical Damage@', $mod, $matches)) {
+                            $item->setIncreasedPhysicalDamage($matches[1]);
+                        }
+                        if (preg_match('@([0-9]+)% increased Stun Duration on enemies@', $mod, $matches)) {
+                            $item->setIncreasedStunDuration($matches[1]);
                         }
                     }
                 }
@@ -224,6 +240,22 @@ class CrawlCommand extends ContainerAwareCommand
 
                 if ($dps = $item->calcDps()) {
                     $item->setDps($dps);
+                }
+
+                if ($value = $item->calcAveragePhysicalDamage()) {
+                    $item->setAveragePhysicalDamage($value);
+                }
+
+                if ($value = $item->calcAverageFireDamage()) {
+                    $item->setAverageFireDamage($value);
+                }
+
+                if ($value = $item->calcAverageColdDamage()) {
+                    $item->setAverageColdDamage($value);
+                }
+
+                if ($value = $item->calcAverageLightningDamage()) {
+                    $item->setAverageLightningDamage($value);
                 }
 
                 $this->itemManager->updateBatch($item, $i);
@@ -383,17 +415,4 @@ class CrawlCommand extends ContainerAwareCommand
 
         return $data;
     }
-
-    // protected $fields = [];
-
-    // private function findFields($data, $prefix = '')
-    // {
-    //     foreach ($data as $k => $v) {
-    //         if (is_array($v)) {
-    //             $this->findFields($v, $prefix.$k);
-    //         } else {
-    //             $this->fields[] = $prefix.$k.' : '.$v;
-    //         }
-    //     }
-    // }
 }

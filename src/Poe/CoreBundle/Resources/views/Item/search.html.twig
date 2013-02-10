@@ -1,63 +1,140 @@
 {% extends 'PoeCoreBundle::layout.html.twig' %}
 
 {% block content %}
-<form method=GET action="{{ path('poe_core_item_search') }}">
-    {{ form_widget(form) }}
+<div class="row">
+    <div class="span3">
+        <h3>Search</h3>
 
-    <button class="btn btn-danger" type=submit>Search</button>
-</form>
+        <form novalidate method=GET action="{{ path('poe_core_item_search') }}">
+            {{ form_widget(form.league) }}
+            <div class="row">
+                <div class="span2" style="width: 120px;">
+                    {{ form_widget(form.type) }}
+                </div>
+                <div class="span1" style="width: 80px;">
+                    {{ form_widget(form.frameType) }}
+                </div>
+            </div>
 
-<h3>Results <small class="muted">( {{ pager.count|number_format }} )</small></h3>
+            {{ form_widget(form.name) }}
 
-{{ msi_pager_render(pager) }}
-<table class="table table-striped">
-    <tr>
-        <th class="span4">Item</th>
-        <th class="span1">DPS</th>
-        <th class="span2">Physical</th>
-        <th class="span2">Elemental</th>
-        <th class="span1">Armour</th>
-        <th class="span1">ER</th>
-        <th class="span1">ES</th>
-    </tr>
-{% for item in items %}
-    <tr>
-        <td>
-            <a class="text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
-                {{ item.name ?: item.type }}
-            </a>
-            <br>
-            <small>{{ item.name ? item.type : item.type.parent }}</small>
-            {% if item.type.parent.name == 'Gem' and item.quality %}( {{ item.quality }}% ){% endif %}
-            <br>
-            <small>
-                Req:
-                {% if item.lvlReq %}<span class="muted">Lvl: {{ item.lvlReq }}</span>{% endif %}
-                {% if item.strReq %}<span class="text-error">Str: {{ item.strReq }}</span>{% endif %}
-                {% if item.dexReq %}<span class="text-success">Dex: {{ item.dexReq }}</span>{% endif %}
-                {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
-            </small>
-        </td>
-        <td>{{ item.dps|number_format(1) }}</td>
-        <td>{% if item.minPhysicalDamage %}{{ item.minPhysicalDamage }}-{{ item.maxPhysicalDamage }}{% endif %}</td>
-        <td>
-            {% if item.minFireDamage %}
-                <small class="text-error">{% if item.minFireDamage %}{{ item.minFireDamage }}-{{ item.maxFireDamage }} ( ~{{ (item.maxFireDamage - item.minFireDamage) / 2 + item.minFireDamage }} ){% endif %}</small>
-                {% if item.minColdDamage or item.minLightningDamage %}<br>{% endif %}
-            {% endif %}
-            {% if item.minColdDamage %}
-                <small class="text-info">{% if item.minColdDamage %}{{ item.minColdDamage }}-{{ item.maxColdDamage }} ( ~{{ (item.maxColdDamage - item.minColdDamage) / 2 + item.minColdDamage }} ){% endif %}</small>
-                {% if item.minLightningDamage %}<br>{% endif %}
-            {% endif %}
-            {% if item.minLightningDamage %}
-                <small class="text-warning">{% if item.minLightningDamage %}{{ item.minLightningDamage }}-{{ item.maxLightningDamage }} ( ~{{ (item.maxLightningDamage - item.minLightningDamage) / 2 + item.minLightningDamage }} ){% endif %}</small>
-            {% endif %}
-        </td>
-        <td>{{ item.armour }}</td>
-        <td>{{ item.evasionRating }}</td>
-        <td>{{ item.energyShield }}</td>
-    </tr>
-{% endfor %}
-</table>
-{{ msi_pager_render(pager) }}
+            <div class="row">
+                <div class="span2" style="width: 150px;">
+                    <p><small>Property</small></p>
+                    {{ form_widget(form.prop1) }}
+                    {{ form_widget(form.prop2) }}
+                    {{ form_widget(form.prop3) }}
+                </div>
+                <div class="span1" style="width: 50px;">
+                    <p><small>Min</small></p>
+                    {{ form_widget(form.prop1val) }}
+                    {{ form_widget(form.prop2val) }}
+                    {{ form_widget(form.prop3val) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span2" style="width: 150px;">
+                    <p><small>Mod</small></p>
+                    {{ form_widget(form.mod1) }}
+                    {{ form_widget(form.mod2) }}
+                    {{ form_widget(form.mod3) }}
+                    {{ form_widget(form.mod4) }}
+                    {{ form_widget(form.mod5) }}
+                    {{ form_widget(form.mod6) }}
+                </div>
+                <div class="span1" style="width: 50px;">
+                    <p><small>Min</small></p>
+                    {{ form_widget(form.mod1val) }}
+                    {{ form_widget(form.mod2val) }}
+                    {{ form_widget(form.mod3val) }}
+                    {{ form_widget(form.mod4val) }}
+                    {{ form_widget(form.mod5val) }}
+                    {{ form_widget(form.mod6val) }}
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+            <button class="btn" type=submit>Search</button>
+            <a class="btn" href="{{ path('poe_core_item_search') }}">Reset</a>
+        </form>
+    </div>
+    <div class="span9">
+        <h3>Results</h3>
+
+        {{ msi_pager_render(pager) }}
+        <table class="table table-striped">
+            <tr>
+                <th>Item</th>
+                <th>DPS</th>
+                <th>Physical</th>
+                <th>Elemental</th>
+                <th>Armour</th>
+                <th>ER</th>
+                <th>ES</th>
+            </tr>
+        {% for item in items %}
+            <tr>
+                <td>
+                    <a class="item text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
+                        {{ item.name ?: item.type }}
+                    </a>
+                    {#<br>
+                    <small>{{ item.name ? item.type : item.type.parent }}</small>#}
+                    {% if item.type.parent %}
+                    {% else %}
+                    has no parent {{ item.frameType }}
+                    {% endif %}
+                    {% if item.type.parent and item.type.parent.name == 'Gem' and item.quality %}( {{ item.quality }}% ){% endif %}
+                    <br>
+                    <small>
+                        Req:
+                        {% if item.lvlReq %}<span class="muted">Lvl: {{ item.lvlReq }}</span>{% endif %}
+                        {% if item.strReq %}<span class="text-error">Str: {{ item.strReq }}</span>{% endif %}
+                        {% if item.dexReq %}<span class="text-success">Dex: {{ item.dexReq }}</span>{% endif %}
+                        {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
+                    </small>
+                </td>
+                <td>{{ item.dps|number_format }}</td>
+                <td>
+                    {% if item.averagePhysicalDamage %}
+                        <small class="muted">{{ item.minPhysicalDamage }}-{{ item.maxPhysicalDamage }}</small>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.averageFireDamage %}
+                        <small class="text-error">{{ item.minFireDamage }}-{{ item.maxFireDamage }}</small>
+                        {% if item.minColdDamage or item.minLightningDamage %}<br>{% endif %}
+                    {% endif %}
+                    {% if item.averageColdDamage %}
+                        <small class="text-info">{{ item.minColdDamage }}-{{ item.maxColdDamage }}</small>
+                        {% if item.minLightningDamage %}<br>{% endif %}
+                    {% endif %}
+                    {% if item.averageLightningDamage %}
+                        <small class="text-warning">{{ item.minLightningDamage }}-{{ item.maxLightningDamage }}</small>
+                    {% endif %}
+                </td>
+                <td>{{ item.armour }}</td>
+                <td>{{ item.evasionRating }}</td>
+                <td>{{ item.energyShield }}</td>
+                <td>{{ item.id }}</td>
+                <td>{{ item.type.parent }} {{ item.type }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+        {{ msi_pager_render(pager) }}
+    </div>
+</div>
 {% endblock content %}
+
+{% block js %}
+{{ parent() }}
+<script>
+    $("select").chosen({placeholder_text_single: ' ', placeholder_text_multiple: ''});
+    $('.item').popover({
+        trigger: 'hover',
+        content: 'dada',
+        animation: false
+    })
+</script>
+{% endblock js %}

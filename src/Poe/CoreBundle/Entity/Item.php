@@ -14,9 +14,15 @@ class Item
 
     const LEAGUE_DEFAULT = 1;
 
+    const FRAME_TYPE_NORMAL = 0;
+
+    const FRAME_TYPE_MAGIC = 1;
+
     const FRAME_TYPE_RARE = 2;
 
     const FRAME_TYPE_UNIQUE = 3;
+
+    const FRAME_TYPE_GEM = 4;
 
     /**
      * @ORM\Column(type="integer")
@@ -84,6 +90,26 @@ class Item
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $maxLightningDamage;
+
+    /**
+     * @ORM\Column(type="decimal", scale=1, nullable=true)
+     */
+    protected $averagePhysicalDamage;
+
+    /**
+     * @ORM\Column(type="decimal", scale=1, nullable=true)
+     */
+    protected $averageFireDamage;
+
+    /**
+     * @ORM\Column(type="decimal", scale=1, nullable=true)
+     */
+    protected $averageColdDamage;
+
+    /**
+     * @ORM\Column(type="decimal", scale=1, nullable=true)
+     */
+    protected $averageLightningDamage;
 
     /**
      * @ORM\Column(type="decimal", scale=2, nullable=true)
@@ -170,20 +196,134 @@ class Item
      */
     protected $mapLvl;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    protected $json;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $increasedPhysicalDamage;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $increasedStunDuration;
+
     public function calcDps()
     {
-        $averagePhysicalDamage =  $this->calcAverageDamage($this->minPhysicalDamage, $this->maxPhysicalDamage);
-        $averageFireDamage =      $this->calcAverageDamage($this->minFireDamage, $this->maxFireDamage);
-        $averageColdDamage =      $this->calcAverageDamage($this->minColdDamage, $this->maxColdDamage);
-        $averageLightningDamage = $this->calcAverageDamage($this->minLightningDamage, $this->maxLightningDamage);
-
-        $combinedAverageDamage = $averagePhysicalDamage + $averageFireDamage + $averageColdDamage + $averageLightningDamage;
+        $combinedAverageDamage = $this->calcAveragePhysicalDamage() + $this->calcAverageFireDamage() + $this->calcAverageColdDamage() + $this->calcAverageLightningDamage();
 
         $crit = 1 + $this->criticalStrikeChance / 100;
 
         $dps = $this->attacksPerSecond * $combinedAverageDamage * $crit;
 
         return $dps;
+    }
+
+    public function calcAveragePhysicalDamage()
+    {
+        return $this->calcAverageDamage($this->minPhysicalDamage, $this->maxPhysicalDamage);
+    }
+
+    public function calcAverageFireDamage()
+    {
+        return $this->calcAverageDamage($this->minFireDamage, $this->maxFireDamage);
+    }
+
+    public function calcAverageColdDamage()
+    {
+        return $this->calcAverageDamage($this->minColdDamage, $this->maxColdDamage);
+    }
+
+    public function calcAverageLightningDamage()
+    {
+        return $this->calcAverageDamage($this->minLightningDamage, $this->maxLightningDamage);
+    }
+
+    public function getIncreasedPhysicalDamage()
+    {
+        return $this->increasedPhysicalDamage;
+    }
+
+    public function setIncreasedPhysicalDamage($increasedPhysicalDamage)
+    {
+        $this->increasedPhysicalDamage = $increasedPhysicalDamage;
+
+        return $this;
+    }
+
+    public function getIncreasedStunDuration()
+    {
+        return $this->increasedStunDuration;
+    }
+
+    public function setIncreasedStunDuration($increasedStunDuration)
+    {
+        $this->increasedStunDuration = $increasedStunDuration;
+
+        return $this;
+    }
+
+    public function getJson()
+    {
+        return $this->json;
+    }
+
+    public function setJson($json)
+    {
+        $this->json = $json;
+
+        return $this;
+    }
+
+    public function getAveragePhysicalDamage()
+    {
+        return $this->averagePhysicalDamage;
+    }
+
+    public function setAveragePhysicalDamage($averagePhysicalDamage)
+    {
+        $this->averagePhysicalDamage = $averagePhysicalDamage;
+
+        return $this;
+    }
+
+    public function getAverageFireDamage()
+    {
+        return $this->averageFireDamage;
+    }
+
+    public function setAverageFireDamage($averageFireDamage)
+    {
+        $this->averageFireDamage = $averageFireDamage;
+
+        return $this;
+    }
+
+    public function getAverageColdDamage()
+    {
+        return $this->averageColdDamage;
+    }
+
+    public function setAverageColdDamage($averageColdDamage)
+    {
+        $this->averageColdDamage = $averageColdDamage;
+
+        return $this;
+    }
+
+    public function getAverageLightningDamage()
+    {
+        return $this->averageLightningDamage;
+    }
+
+    public function setAverageLightningDamage($averageLightningDamage)
+    {
+        $this->averageLightningDamage = $averageLightningDamage;
+
+        return $this;
     }
 
     public function getDps()
