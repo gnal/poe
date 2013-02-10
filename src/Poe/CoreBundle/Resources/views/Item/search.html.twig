@@ -63,7 +63,7 @@
         <h3>Results</h3>
 
         {{ msi_pager_render(pager) }}
-        <table class="table table-striped">
+        <table class="table table-bordered">
             <tr>
                 <th>Item</th>
                 <th>DPS</th>
@@ -117,8 +117,8 @@
                 <td>{{ item.armour }}</td>
                 <td>{{ item.evasionRating }}</td>
                 <td>{{ item.energyShield }}</td>
-                <td>{{ item.id }}</td>
-                <td>{{ item.type.parent }} {{ item.type }}</td>
+                {#<td>{{ item.id }}</td>
+                <td>{{ item.type.parent }} {{ item.type }}</td>#}
             </tr>
         {% endfor %}
         </table>
@@ -129,8 +129,27 @@
 
 {% block js %}
 {{ parent() }}
+<script src="https://github.com/brandonaaron/jquery-mousewheel/raw/master/jquery.mousewheel.js"></script>
 <script>
-    $("select").chosen({placeholder_text_single: ' ', placeholder_text_multiple: ''});
+    $(function() {
+        $.each($('.chzn-results'), function(i, v) {
+            var $v = $(v),
+                height = $v.height(),
+                scrollHeight = $v.get(0).scrollHeight;
+
+            $v.on('mousewheel', function(e, d) {
+                if((this.scrollTop === (scrollHeight - height) && d < 0) || (this.scrollTop === 0 && d > 0)) {
+                    e.preventDefault();
+                }
+            });
+        });
+    });
+
+    $("select").chosen({
+        placeholder_text_single: 'None',
+        placeholder_text_multiple: 'None',
+        allow_single_deselect: true
+    });
     $('.item').popover({
         trigger: 'hover',
         content: 'dada',

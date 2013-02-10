@@ -167,13 +167,13 @@ class CrawlCommand extends ContainerAwareCommand
                             $item->setIncreasedStunDuration($matches[1]);
                         }
                         if (preg_match('@([0-9]+) to Intelligence@', $mod, $matches)) {
-                            $item->setInt($matches[1]);
+                            $item->setIntelligence($matches[1]);
                         }
                         if (preg_match('@([0-9]+) to Dexterity@', $mod, $matches)) {
-                            $item->setDex($matches[1]);
+                            $item->setDexterity($matches[1]);
                         }
                         if (preg_match('@([0-9]+) to Strength@', $mod, $matches)) {
-                            $item->setStr($matches[1]);
+                            $item->setStrength($matches[1]);
                         }
                         if (preg_match('@([0-9]+)% increased Attack Speed@', $mod, $matches)) {
                             $item->setIncreasedAttackSpeed($matches[1]);

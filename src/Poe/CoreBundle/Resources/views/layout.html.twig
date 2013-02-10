@@ -32,7 +32,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     color: #a38d6d;
 }
 .table {
-    border: 1px solid #333;
+    border-color: #333;
     background-color: #0f0f0f;
 }
 .table th,
@@ -40,9 +40,18 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     vertical-align: middle;
     border-color: #333;
 }
-.table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
-    background-color: #0f0f0f;
+.table-bordered {
+    border-left: 1px solid #333;
 }
+.table-bordered th, .table-bordered td {
+    border-left: 1px solid #1a1b18;
+}
+.table-bordered th:first-child, .table-bordered td:first-child {
+    border-left: none;
+}
+/*.table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
+    background-color: #0f0f0f;
+}*/
 .text-frame-type-0 {
     color: #c8c8c8;
 }
@@ -76,9 +85,9 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     margin-bottom: 10px;
 }
 .chzn-container .chzn-drop {
-    /*background: #1a1b18;*/
     background: #0f0f0f;
     border-color: #333;
+    width: 218px !important;
 }
 .chzn-container-single .chzn-search input {
     background: #0f0f0f;
@@ -86,8 +95,18 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     color: #a38d6d;
 }
 .chzn-container .chzn-results .no-results {
-    /*background: #1a1b18;*/
     background: #0f0f0f;
+}
+.chzn-container-single .chzn-search {
+    border-top: 1px solid #333;
+}
+.chzn-container-single .chzn-search input {
+    width: 183px !important;
+}
+.chzn-container .chzn-results li em {
+    background: red;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
 }
 .chzn-container-active .chzn-single-with-drop {
     background: #0f0f0f;
@@ -101,6 +120,30 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     height: 20px;
     line-height: 20px;
     color: #a38d6d;
+}
+.chzn-container .chzn-results .highlighted {
+    background: red;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+}
+.chzn-container .chzn-results li[result-selected] {
+    background: red !important;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+}
+.chzn-container-single .chzn-single abbr {
+    background-image: url("/bundles/msicmf/vendor/bootstrap/img/glyphicons-halflings-white.png");
+    background-position: -312px 0;
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
+    right: 18px;
+}
+.chzn-container-single .chzn-single abbr:hover {
+    background-position: -312px 0;
+}
+.chzn-container-single .chzn-single span {
+    height: 20px;
 }
 </style>
 {{ parent() }}

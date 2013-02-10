@@ -23,26 +23,26 @@ class SearchFormType extends AbstractType
         ];
 
         $mod = [
-            'increasedPhysicalDamage' => '+% Physical Dmg',
-            'increasedStunDuration' => '+% Stun Duration',
-            'int' => '+ Int',
-            'dex' => '+ Dex',
-            'str' => '+ Str',
-            'increasedAttackSpeed' => '+% Attack Speed',
-            'increasedCastSpeed' => '+% Cast Speed',
-            'manaOnKill' => '+ Mana on Kill',
-            'lifeOnKill' => '+ Life on Kill',
-            'increasedElementalDamageWeapons' => '+% Elemental Dmg',
-            'accuracyRating' => '+ Accuracy Rating',
-            'lifeLeech' => '+% Life Leech',
-            'manaLeech' => '+% Mana Leech',
-            'chaosResist' => '+% Chaos Resist',
-            'coldResist' => '+% Cold Resist',
-            'lightningResist' => '+% Lightning Resist',
-            'fireResist' => '+% Fire Resist',
-            'reducedStunThreshold' => '+% Reduced Stun Threshold',
-            'lifeOnHit' => '+ Life on Hit',
-            'maxEnergyShield' => '+ Max Energy Shield',
+            'increasedPhysicalDamage' => 'Physical Dmg %',
+            'increasedStunDuration' => 'Stun Duration',
+            'intelligence' => 'Intelligence',
+            'dexterity' => 'Dexterity',
+            'strength' => 'Strength',
+            'increasedAttackSpeed' => 'Attack Speed %',
+            'increasedCastSpeed' => 'Cast Speed %',
+            'manaOnKill' => 'Mana on Kill',
+            'lifeOnKill' => 'Life on Kill',
+            'increasedElementalDamageWeapons' => 'Elemental Dmg %',
+            'accuracyRating' => 'Accuracy Rating',
+            'lifeLeech' => 'Life Leech',
+            'manaLeech' => 'Mana Leech',
+            'chaosResist' => 'Chaos Resist',
+            'coldResist' => 'Cold Resist',
+            'lightningResist' => 'Lightning Resist',
+            'fireResist' => 'Fire Resist',
+            'reducedStunThreshold' => 'Reduced Stun Threshold',
+            'lifeOnHit' => 'Life on Hit',
+            'maxEnergyShield' => 'Max Energy Shield',
         ];
 
         $builder
@@ -79,7 +79,7 @@ class SearchFormType extends AbstractType
             ])
             ->add('prop1', 'choice', [
                 'label' => ' ',
-                'empty_value' => 'None',
+                'empty_value' => '',
                 'choices' => $prop,
             ])
             ->add('prop1val', 'text', [
@@ -89,7 +89,7 @@ class SearchFormType extends AbstractType
             ])
             ->add('prop2', 'choice', [
                 'label' => ' ',
-                'empty_value' => 'None',
+                'empty_value' => '',
                 'choices' => $prop,
             ])
             ->add('prop2val', 'text', [
@@ -99,7 +99,7 @@ class SearchFormType extends AbstractType
             ])
             ->add('prop3', 'choice', [
                 'label' => ' ',
-                'empty_value' => 'None',
+                'empty_value' => '',
                 'choices' => $prop,
             ])
             ->add('prop3val', 'text', [
@@ -109,7 +109,7 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod1', 'choice', [
                 'label' => ' ',
-                'empty_value' => 'None',
+                'empty_value' => '',
                 'choices' => $mod,
             ])
             ->add('mod1val', 'text', [
@@ -119,7 +119,7 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod2', 'choice', [
                 'label' => ' ',
-                'empty_value' => 'None',
+                'empty_value' => '',
                 'choices' => $mod,
             ])
             ->add('mod2val', 'text', [
@@ -129,7 +129,7 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod3', 'choice', [
                 'label' => ' ',
-                'empty_value' => 'None',
+                'empty_value' => '',
                 'choices' => $mod,
             ])
             ->add('mod3val', 'text', [
@@ -139,7 +139,7 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod4', 'choice', [
                 'label' => ' ',
-                'empty_value' => 'None',
+                'empty_value' => '',
                 'choices' => $mod,
             ])
             ->add('mod4val', 'text', [
@@ -149,7 +149,7 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod5', 'choice', [
                 'label' => ' ',
-                'empty_value' => 'None',
+                'empty_value' => '',
                 'choices' => $mod,
             ])
             ->add('mod5val', 'text', [
@@ -159,7 +159,7 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod6', 'choice', [
                 'label' => ' ',
-                'empty_value' => 'None',
+                'empty_value' => '',
                 'choices' => $mod,
             ])
             ->add('mod6val', 'text', [

@@ -215,17 +215,17 @@ class Item
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $int;
+    protected $intelligence;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $dex;
+    protected $dexterity;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $str;
+    protected $strength;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -333,38 +333,38 @@ class Item
         return $this->calcAverageDamage($this->minLightningDamage, $this->maxLightningDamage);
     }
 
-    public function getInt()
+    public function getIntelligence()
     {
         return $this->int;
     }
 
-    public function setInt($int)
+    public function setIntelligence($intelligence)
     {
-        $this->int = $int;
+        $this->intelligence = $intelligence;
 
         return $this;
     }
 
-    public function getDex()
+    public function getDexterity()
     {
-        return $this->dex;
+        return $this->dexterity;
     }
 
-    public function setDex($dex)
+    public function setDexterity($dexterity)
     {
-        $this->dex = $dex;
+        $this->dexterity = $dexterity;
 
         return $this;
     }
 
-    public function getStr()
+    public function getStrength()
     {
-        return $this->str;
+        return $this->strength;
     }
 
-    public function setStr($str)
+    public function setStrength($strength)
     {
-        $this->str = $str;
+        $this->strength = $strength;
 
         return $this;
     }
