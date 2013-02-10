@@ -13,9 +13,13 @@ class ItemController extends Controller
     public function searchAction()
     {
         $form = $this->get('form.factory')->create(new SearchFormType());
+        $valid = false;
 
         if ($search = $this->getRequest()->query->get('poe_search')) {
             $form->bind($this->getRequest());
+            if ($form->isValid()) {
+                $valid = true;
+            }
         }
 
         $qb = $this->get('poe_core.item_manager')->getFindByQueryBuilder(
@@ -29,22 +33,22 @@ class ItemController extends Controller
             // ['tp.name' => 'ASC', 'a.lvlReq' => 'ASC']
             ['a.dps' => 'DESC']
         );
-
+        if ($valid) {
         for ($i=1; $i < 4; $i++) {
             $prop = 'prop'.$i;
             $propVal = 'prop'.$i.'val';
-            if (isset($search[$prop]) && '' !== $search[$prop] && isset($search[$propVal]) && '' !== $search[$propVal]) {
+            if (isset($search[$prop]) && '' !== $search[$prop]) {
                 $qb->andWhere('a.'.$search[$prop].' >= :'.$search[$prop].'');
-                $qb->setParameter($search[$prop], $search[$propVal]);
+                $qb->setParameter($search[$prop], $search[$propVal] ?: 1);
             }
         }
 
         for ($i=1; $i < 7; $i++) {
             $mod = 'mod'.$i;
             $modVal = 'mod'.$i.'val';
-            if (isset($search[$mod]) && '' !== $search[$mod] && isset($search[$modVal]) && '' !== $search[$modVal]) {
+            if (isset($search[$mod]) && '' !== $search[$mod]) {
                 $qb->andWhere('a.'.$search[$mod].' >= :'.$search[$mod].'');
-                $qb->setParameter($search[$mod], $search[$modVal]);
+                $qb->setParameter($search[$mod], $search[$modVal] ?: 1);
             }
         }
 
@@ -69,7 +73,7 @@ class ItemController extends Controller
             $type = $this->get('poe_core.item_type_manager')->getOneBy(['a.id' => $search['type']]);
             $qb->andWhere('t.root = :typeRoot')->setParameter('typeRoot', $type->getRoot());
         }
-
+}
         $pager = $this->get('msi_cmf.pager.factory')->create($qb);
         $pager->paginate($this->getRequest()->query->get('page', 1), 10);
         $items = $pager->getIterator()->getArrayCopy();

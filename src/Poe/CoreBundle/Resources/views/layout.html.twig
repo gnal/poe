@@ -26,6 +26,10 @@ label {
 select {
     width: 100%;
 }
+input.alert-error {
+    color: #b94a48 !important;
+    border-color: #b94a48 !important;
+}
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
     background: #0f0f0f;
     border-color: #333;
@@ -126,21 +130,17 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     color: #fff;
     text-shadow: 1px 1px 1px #000;
 }
-.chzn-container .chzn-results li[result-selected] {
-    background: red !important;
-    color: #fff;
-    text-shadow: 1px 1px 1px #000;
-}
 .chzn-container-single .chzn-single abbr {
     background-image: url("/bundles/msicmf/vendor/bootstrap/img/glyphicons-halflings-white.png");
     background-position: -312px 0;
     width: 14px;
     height: 14px;
-    margin-top: 2px;
+    margin-top: 1px;
     right: 18px;
 }
 .chzn-container-single .chzn-single abbr:hover {
     background-position: -312px 0;
+    background-color: red;
 }
 .chzn-container-single .chzn-single span {
     height: 20px;

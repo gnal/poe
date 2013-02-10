@@ -6,6 +6,7 @@
         <h3>Search</h3>
 
         <form novalidate method=GET action="{{ path('poe_core_item_search') }}">
+            {% form_theme form 'PoeCoreBundle:Form:form.html.twig' %}
             {{ form_widget(form.league) }}
             <div class="row">
                 <div class="span2" style="width: 120px;">
@@ -79,8 +80,8 @@
                     <a class="item text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
                         {{ item.name ?: item.type }}
                     </a>
-                    {#<br>
-                    <small>{{ item.name ? item.type : item.type.parent }}</small>#}
+                    <br>
+                    <small>{{ item.name ? item.type : item.type.parent }}</small>
                     {% if item.type.parent %}
                     {% else %}
                     has no parent {{ item.frameType }}
@@ -153,6 +154,11 @@
     $('.item').popover({
         trigger: 'hover',
         content: 'dada',
+        animation: false
+    })
+    $('input.alert-error').tooltip({
+        trigger: 'hover',
+        html: true,
         animation: false
     })
 </script>

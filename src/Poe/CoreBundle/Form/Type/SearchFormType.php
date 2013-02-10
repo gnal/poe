@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Constraints\MinLength;
 
 use Poe\CoreBundle\Entity\Item;
 
@@ -63,6 +65,7 @@ class SearchFormType extends AbstractType
                 },
             ])
             ->add('name', 'text', [
+                'constraints' => [new MinLength(['limit' => 3])],
                 'attr' => [
                     'placeholder' => 'Name',
                 ],
@@ -83,6 +86,7 @@ class SearchFormType extends AbstractType
                 'choices' => $prop,
             ])
             ->add('prop1val', 'text', [
+                'constraints' => [new Type(['type' => 'numeric'])],
                 'attr' => [
                     'style' => 'width: 36px;',
                 ],
@@ -93,6 +97,7 @@ class SearchFormType extends AbstractType
                 'choices' => $prop,
             ])
             ->add('prop2val', 'text', [
+                'constraints' => [new Type(['type' => 'numeric'])],
                 'attr' => [
                     'style' => 'width: 36px;',
                 ],
@@ -103,6 +108,7 @@ class SearchFormType extends AbstractType
                 'choices' => $prop,
             ])
             ->add('prop3val', 'text', [
+                'constraints' => [new Type(['type' => 'numeric'])],
                 'attr' => [
                     'style' => 'width: 36px;',
                 ],
@@ -113,6 +119,7 @@ class SearchFormType extends AbstractType
                 'choices' => $mod,
             ])
             ->add('mod1val', 'text', [
+                'constraints' => [new Type(['type' => 'numeric'])],
                 'attr' => [
                     'style' => 'width: 36px;',
                 ],
@@ -123,6 +130,7 @@ class SearchFormType extends AbstractType
                 'choices' => $mod,
             ])
             ->add('mod2val', 'text', [
+                'constraints' => [new Type(['type' => 'numeric'])],
                 'attr' => [
                     'style' => 'width: 36px;',
                 ],
@@ -133,6 +141,7 @@ class SearchFormType extends AbstractType
                 'choices' => $mod,
             ])
             ->add('mod3val', 'text', [
+                'constraints' => [new Type(['type' => 'numeric'])],
                 'attr' => [
                     'style' => 'width: 36px;',
                 ],
@@ -143,6 +152,7 @@ class SearchFormType extends AbstractType
                 'choices' => $mod,
             ])
             ->add('mod4val', 'text', [
+                'constraints' => [new Type(['type' => 'numeric'])],
                 'attr' => [
                     'style' => 'width: 36px;',
                 ],
@@ -153,6 +163,7 @@ class SearchFormType extends AbstractType
                 'choices' => $mod,
             ])
             ->add('mod5val', 'text', [
+                'constraints' => [new Type(['type' => 'numeric'])],
                 'attr' => [
                     'style' => 'width: 36px;',
                 ],
@@ -163,6 +174,7 @@ class SearchFormType extends AbstractType
                 'choices' => $mod,
             ])
             ->add('mod6val', 'text', [
+                'constraints' => [new Type(['type' => 'numeric'])],
                 'attr' => [
                     'style' => 'width: 36px;',
                 ],
