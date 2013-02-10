@@ -82,7 +82,8 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     background-color: #0f0f0f;
 }
 .pagination ul > li > a:hover, .pagination ul > li > a:focus, .pagination ul > .active > a, .pagination ul > .active > span {
-    background-color: #1a1b18;
+    background-color: yellow;
+    color: #000;
 }
 /* chosen */
 .chzn-container {
@@ -158,6 +159,10 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 .container-fluid {
     min-width: 960px;
+}
+#results {
+    min-height: 500px;
+    background: url(/bundles/poecore/img/ajax-loader.gif) no-repeat center center;
 }
 </style>
 {{ parent() }}

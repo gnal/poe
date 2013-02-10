@@ -1,0 +1,60 @@
+<div id="results">
+    {% if items|length %}
+    <table class="table table-bordered">
+        <tr>
+            <th>Item</th>
+            <th>DPS</th>
+            <th>Physical</th>
+            <th>Elemental</th>
+            <th>Armour</th>
+            <th>ER</th>
+            <th>ES</th>
+        </tr>
+    {% for item in items %}
+        <tr>
+            <td>
+                <a class="item text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
+                    {{ item.name ?: item.type }}
+                </a>
+                {#<small>{{ item.name ? item.type : item.type.parent }}</small>#}
+                <br>
+                <small>
+                    Req:
+                    {% if item.lvlReq %}<span class="muted">Lvl: {{ item.lvlReq }}</span>{% endif %}
+                    {% if item.strReq %}<span class="text-error">Str: {{ item.strReq }}</span>{% endif %}
+                    {% if item.dexReq %}<span class="text-success">Dex: {{ item.dexReq }}</span>{% endif %}
+                    {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
+                </small>
+            </td>
+            <td>{{ item.dps|number_format }}</td>
+            <td>
+                {% if item.averagePhysicalDamage %}
+                    <small class="muted">{{ item.minPhysicalDamage }}-{{ item.maxPhysicalDamage }}</small>
+                {% endif %}
+            </td>
+            <td>
+                {% if item.averageFireDamage %}
+                    <small class="text-error">{{ item.minFireDamage }}-{{ item.maxFireDamage }}</small>
+                    {% if item.minColdDamage or item.minLightningDamage %}<br>{% endif %}
+                {% endif %}
+                {% if item.averageColdDamage %}
+                    <small class="text-info">{{ item.minColdDamage }}-{{ item.maxColdDamage }}</small>
+                    {% if item.minLightningDamage %}<br>{% endif %}
+                {% endif %}
+                {% if item.averageLightningDamage %}
+                    <small class="text-warning">{{ item.minLightningDamage }}-{{ item.maxLightningDamage }}</small>
+                {% endif %}
+            </td>
+            <td>{{ item.armour }}</td>
+            <td>{{ item.evasionRating }}</td>
+            <td>{{ item.energyShield }}</td>
+            {#<td>{{ item.id }}</td>
+            <td>{{ item.type.parent }} {{ item.type }}</td>#}
+        </tr>
+    {% endfor %}
+    </table>
+    {{ msi_pager_render(pager) }}
+    {% else %}
+    Nothing was found.
+    {% endif %}
+</div>

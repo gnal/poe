@@ -78,7 +78,17 @@ class ItemController extends Controller
         $pager->paginate($this->getRequest()->query->get('page', 1), 10);
         $items = $pager->getIterator()->getArrayCopy();
 
-        return $this->render('PoeCoreBundle:Item:search.html.twig', ['pager' => $pager, 'form' => $form->createView(), 'items' => $items]);
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            $response = $this->render('PoeCoreBundle:Item:search_content.html.twig', ['pager' => $pager, 'form' => $form->createView(), 'items' => $items]);
+            $response->setSharedMaxAge(666);
+
+            return $response;
+        } else {
+            $response = $this->render('PoeCoreBundle:Item:search.html.twig', ['pager' => $pager, 'form' => $form->createView(), 'items' => $items]);
+            $response->setSharedMaxAge(666);
+
+            return $response;
+        }
     }
 
     public function viewJsonAction()
