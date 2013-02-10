@@ -93,233 +93,244 @@ class CrawlCommand extends ContainerAwareCommand
 
     protected function process()
     {
-        $l = 1;
-        for ($id=110700; $id < 110720; $id++) {
-            $data = $this->getJson($id);
+        for ($page=1; $page < 2; $page++) {
+            $hrefs = $this->getForumThreads(306, $page);
 
-            if (!$data) {
-                $l++;
-                continue;
-            }
+            foreach ($hrefs as $href) {
+                $data = $this->getThreadData($href);
 
-            $i = 1;
-            foreach ($data as $v) {
-                $row = $v[1];
-
-                if (
-                    !$row['verified'] ||
-                    $row['frameType'] == 5
-                ) {
+                if (!$data) {
                     continue;
                 }
 
-                $item = $this->itemManager->create();
+                preg_match('@([0-9]+)$@', $href, $matches);
 
-                $item
-                    ->setName($row['name'])
-                    ->setVerified($row['verified'])
-                    ->setFrameType($row['frameType'])
-                    ->setSockets('dada')
-                    ->setIdentified($row['identified'])
-                    ->setAccountName($this->crawler->filter('a.profile-link.post_by_account')->text())
-                    ->setThreadId($id)
-                    ->setJson(json_encode($v))
-                ;
+                $threadId = $matches[1];
 
-                // league
-                if ($row['league'] == 'Default') {
-                    $item->setLeague(Item::LEAGUE_DEFAULT);
-                } elseif ($row['league'] == 'Hardcore') {
-                    $item->setLeague(Item::LEAGUE_HARDCORE);
-                }
+                // we delete all items with this thread id so we dont have duplicates if we happen to crawl same threads
+                $dql = 'delete from '.$this->itemManager->getClass().' i where i.threadId = '.$threadId;
+                $numDeleted = $this->itemManager->getEntityManager()->createQuery($dql)->execute();
+                $this->output->writeln("<error>DELETED</error> ".$numDeleted." for thread #".$threadId);
 
-                // type
-                $type = $this->findType($row);
-                if (!$type->getId()) {
-                    $this->itemTypeManager->update($type);
-                }
+                $i = 1;
+                foreach ($data as $v) {
+                    $row = $v[1];
 
-                // requirements
-                if (isset($row['requirements'])) {
-                    foreach ($row['requirements'] as $requirement) {
-                        if ($requirement['name'] === 'Level') {
-                            $item->setLvlReq($requirement['values'][0][0]);
-                        }
-                        if ($requirement['name'] === 'Dex') {
-                            $item->setDexReq($requirement['values'][0][0]);
-                        }
-                        if ($requirement['name'] === 'Str') {
-                            $item->setStrReq($requirement['values'][0][0]);
-                        }
-                        if ($requirement['name'] === 'Int') {
-                            $item->setIntReq($requirement['values'][0][0]);
-                        }
+                    if (
+                        !$row['verified'] ||
+                        $row['frameType'] == 5
+                    ) {
+                        continue;
                     }
-                }
 
-                // mods
-                if (isset($row['explicitMods'])) {
-                    foreach ($row['explicitMods'] as $mod) {
-                        if (preg_match('@([0-9]+)% increased Physical Damage@', $mod, $matches)) {
-                            $item->setIncreasedPhysicalDamage($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% increased Stun Duration on enemies@', $mod, $matches)) {
-                            $item->setIncreasedStunDuration($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) to Intelligence@', $mod, $matches)) {
-                            $item->setIntelligence($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) to Dexterity@', $mod, $matches)) {
-                            $item->setDexterity($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) to Strength@', $mod, $matches)) {
-                            $item->setStrength($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% increased Attack Speed@', $mod, $matches)) {
-                            $item->setIncreasedAttackSpeed($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% increased Cast Speed@', $mod, $matches)) {
-                            $item->setIncreasedCastSpeed($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) Mana Gained when you Kill an enemy@', $mod, $matches)) {
-                            $item->setManaOnKill($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) Life Gained when you Kill an enemy@', $mod, $matches)) {
-                            $item->setLifeOnKill($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% increased Elemental Damage with Weapons@', $mod, $matches)) {
-                            $item->setIncreasedElementalDamageWeapons($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) to Accuracy Rating@', $mod, $matches)) {
-                            $item->setAccuracyRating($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% of Physical Attack Damage Leeched back as Life@', $mod, $matches)) {
-                            $item->setLifeLeech($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% of Physical Attack Damage Leeched back as Mana@', $mod, $matches)) {
-                            $item->setManaLeech($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% to Chaos Resist@', $mod, $matches)) {
-                            $item->setChaosResist($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% to Cold Resistance@', $mod, $matches)) {
-                            $item->setColdResist($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% to Lightning Resistance@', $mod, $matches)) {
-                            $item->setLightningResist($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% to Fire Resistance@', $mod, $matches)) {
-                            $item->setFireResist($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% reduced Enemy Stun Threshold@', $mod, $matches)) {
-                            $item->setReducedStunThreshold($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) Life gained for each enemy hit by your Attacks@', $mod, $matches)) {
-                            $item->setLifeOnHit($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) to maximum Energy Shield@', $mod, $matches)) {
-                            $item->setMaxEnergyShield($matches[1]);
-                        }
+                    $item = $this->itemManager->create();
+
+                    $item
+                        ->setName($row['name'])
+                        ->setVerified($row['verified'])
+                        ->setFrameType($row['frameType'])
+                        ->setSockets('dada')
+                        ->setIdentified($row['identified'])
+                        ->setAccountName($this->crawler->filter('a.profile-link.post_by_account')->text())
+                        ->setThreadId($threadId)
+                        ->setJson(json_encode($v))
+                        // ->setEditedAt($this->crawler->filter('div.last_edited_by')->text())
+                    ;
+
+                    // league
+                    if ($row['league'] == 'Default') {
+                        $item->setLeague(Item::LEAGUE_DEFAULT);
+                    } elseif ($row['league'] == 'Hardcore') {
+                        $item->setLeague(Item::LEAGUE_HARDCORE);
                     }
-                }
 
-                // properties
-                if (isset($row['properties'])) {
-                    foreach ($row['properties'] as $property) {
-                        if ($property['name'] === 'Physical Damage') {
-                            $pieces = explode('-', $property['values'][0][0]);
-                            $min = $pieces[0];
-                            $max = $pieces[1];
-                            $item
-                                ->setMinPhysicalDamage($min)
-                                ->setMaxPhysicalDamage($max)
-                            ;
-                        }
-                        if ($property['name'] === 'Elemental Damage') {
-                            foreach ($property['values'] as $value) {
-                                if ($value[1] == 4) {
-                                    $pieces = explode('-', $value[0]);
-                                    $min = $pieces[0];
-                                    $max = $pieces[1];
-                                    $item
-                                        ->setMinFireDamage($min)
-                                        ->setMaxFireDamage($max)
-                                    ;
-                                }
-                                if ($value[1] == 5) {
-                                    $pieces = explode('-', $value[0]);
-                                    $min = $pieces[0];
-                                    $max = $pieces[1];
-                                    $item
-                                        ->setMinColdDamage($min)
-                                        ->setMaxColdDamage($max)
-                                    ;
-                                }
-                                if ($value[1] == 6) {
-                                    $pieces = explode('-', $value[0]);
-                                    $min = $pieces[0];
-                                    $max = $pieces[1];
-                                    $item
-                                        ->setMinLightningDamage($min)
-                                        ->setMaxLightningDamage($max)
-                                    ;
-                                }
+                    // type
+                    $type = $this->findType($row);
+                    if (!$type->getId()) {
+                        $this->itemTypeManager->update($type);
+                    }
+
+                    // requirements
+                    if (isset($row['requirements'])) {
+                        foreach ($row['requirements'] as $requirement) {
+                            if ($requirement['name'] === 'Level') {
+                                $item->setLvlReq($requirement['values'][0][0]);
+                            }
+                            if ($requirement['name'] === 'Dex') {
+                                $item->setDexReq($requirement['values'][0][0]);
+                            }
+                            if ($requirement['name'] === 'Str') {
+                                $item->setStrReq($requirement['values'][0][0]);
+                            }
+                            if ($requirement['name'] === 'Int') {
+                                $item->setIntReq($requirement['values'][0][0]);
                             }
                         }
-                        if ($property['name'] === 'Quality') {
-                            $item->setQuality(str_replace('%', '', $property['values'][0][0]));
-                        }
-                        if ($property['name'] === 'Armour') {
-                            $item->setArmour($property['values'][0][0]);
-                        }
-                        if ($property['name'] === 'Evasion Rating') {
-                            $item->setEvasionRating($property['values'][0][0]);
-                        }
-                        if ($property['name'] === 'Energy Shield') {
-                            $item->setEnergyShield($property['values'][0][0]);
-                        }
-                        if ($property['name'] === 'Attacks per Second') {
-                            $item->setAttacksPerSecond($property['values'][0][0]);
-                        }
-                        if ($property['name'] === 'Critical Strike Chance') {
-                            $item->setCriticalStrikeChance($property['values'][0][0]);
-                        }
-                        if ($property['name'] === 'Map Level') {
-                            $item->setMapLvl($property['values'][0][0]);
+                    }
+
+                    // mods
+                    if (isset($row['explicitMods'])) {
+                        foreach ($row['explicitMods'] as $mod) {
+                            if (preg_match('@([0-9]+)% increased Physical Damage@', $mod, $matches)) {
+                                $item->setIncreasedPhysicalDamage($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% increased Stun Duration on enemies@', $mod, $matches)) {
+                                $item->setIncreasedStunDuration($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+) to Intelligence@', $mod, $matches)) {
+                                $item->setIntelligence($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+) to Dexterity@', $mod, $matches)) {
+                                $item->setDexterity($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+) to Strength@', $mod, $matches)) {
+                                $item->setStrength($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% increased Attack Speed@', $mod, $matches)) {
+                                $item->setIncreasedAttackSpeed($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% increased Cast Speed@', $mod, $matches)) {
+                                $item->setIncreasedCastSpeed($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+) Mana Gained when you Kill an enemy@', $mod, $matches)) {
+                                $item->setManaOnKill($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+) Life Gained when you Kill an enemy@', $mod, $matches)) {
+                                $item->setLifeOnKill($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% increased Elemental Damage with Weapons@', $mod, $matches)) {
+                                $item->setIncreasedElementalDamageWeapons($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+) to Accuracy Rating@', $mod, $matches)) {
+                                $item->setAccuracyRating($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% of Physical Attack Damage Leeched back as Life@', $mod, $matches)) {
+                                $item->setLifeLeech($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% of Physical Attack Damage Leeched back as Mana@', $mod, $matches)) {
+                                $item->setManaLeech($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% to Chaos Resist@', $mod, $matches)) {
+                                $item->setChaosResist($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% to Cold Resistance@', $mod, $matches)) {
+                                $item->setColdResist($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% to Lightning Resistance@', $mod, $matches)) {
+                                $item->setLightningResist($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% to Fire Resistance@', $mod, $matches)) {
+                                $item->setFireResist($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+)% reduced Enemy Stun Threshold@', $mod, $matches)) {
+                                $item->setReducedStunThreshold($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+) Life gained for each enemy hit by your Attacks@', $mod, $matches)) {
+                                $item->setLifeOnHit($matches[1]);
+                            }
+                            if (preg_match('@([0-9]+) to maximum Energy Shield@', $mod, $matches)) {
+                                $item->setMaxEnergyShield($matches[1]);
+                            }
                         }
                     }
+
+                    // properties
+                    if (isset($row['properties'])) {
+                        foreach ($row['properties'] as $property) {
+                            if ($property['name'] === 'Physical Damage') {
+                                $pieces = explode('-', $property['values'][0][0]);
+                                $min = $pieces[0];
+                                $max = $pieces[1];
+                                $item
+                                    ->setMinPhysicalDamage($min)
+                                    ->setMaxPhysicalDamage($max)
+                                ;
+                            }
+                            if ($property['name'] === 'Elemental Damage') {
+                                foreach ($property['values'] as $value) {
+                                    if ($value[1] == 4) {
+                                        $pieces = explode('-', $value[0]);
+                                        $min = $pieces[0];
+                                        $max = $pieces[1];
+                                        $item
+                                            ->setMinFireDamage($min)
+                                            ->setMaxFireDamage($max)
+                                        ;
+                                    }
+                                    if ($value[1] == 5) {
+                                        $pieces = explode('-', $value[0]);
+                                        $min = $pieces[0];
+                                        $max = $pieces[1];
+                                        $item
+                                            ->setMinColdDamage($min)
+                                            ->setMaxColdDamage($max)
+                                        ;
+                                    }
+                                    if ($value[1] == 6) {
+                                        $pieces = explode('-', $value[0]);
+                                        $min = $pieces[0];
+                                        $max = $pieces[1];
+                                        $item
+                                            ->setMinLightningDamage($min)
+                                            ->setMaxLightningDamage($max)
+                                        ;
+                                    }
+                                }
+                            }
+                            if ($property['name'] === 'Quality') {
+                                $item->setQuality(str_replace('%', '', $property['values'][0][0]));
+                            }
+                            if ($property['name'] === 'Armour') {
+                                $item->setArmour($property['values'][0][0]);
+                            }
+                            if ($property['name'] === 'Evasion Rating') {
+                                $item->setEvasionRating($property['values'][0][0]);
+                            }
+                            if ($property['name'] === 'Energy Shield') {
+                                $item->setEnergyShield($property['values'][0][0]);
+                            }
+                            if ($property['name'] === 'Attacks per Second') {
+                                $item->setAttacksPerSecond($property['values'][0][0]);
+                            }
+                            if ($property['name'] === 'Critical Strike Chance') {
+                                $item->setCriticalStrikeChance($property['values'][0][0]);
+                            }
+                            if ($property['name'] === 'Map Level') {
+                                $item->setMapLvl($property['values'][0][0]);
+                            }
+                        }
+                    }
+
+                    $item->setType($type);
+
+                    if ($dps = $item->calcDps()) {
+                        $item->setDps($dps);
+                    }
+
+                    if ($value = $item->calcAveragePhysicalDamage()) {
+                        $item->setAveragePhysicalDamage($value);
+                    }
+
+                    if ($value = $item->calcAverageFireDamage()) {
+                        $item->setAverageFireDamage($value);
+                    }
+
+                    if ($value = $item->calcAverageColdDamage()) {
+                        $item->setAverageColdDamage($value);
+                    }
+
+                    if ($value = $item->calcAverageLightningDamage()) {
+                        $item->setAverageLightningDamage($value);
+                    }
+
+                    $this->itemManager->updateBatch($item, $i);
+
+                    $label = $row['name'] ?: $row['typeLine'];
+                    $this->output->writeln("<info>ADD</info> ".$label);
+                    $i++;
                 }
-
-                $item->setType($type);
-
-                if ($dps = $item->calcDps()) {
-                    $item->setDps($dps);
-                }
-
-                if ($value = $item->calcAveragePhysicalDamage()) {
-                    $item->setAveragePhysicalDamage($value);
-                }
-
-                if ($value = $item->calcAverageFireDamage()) {
-                    $item->setAverageFireDamage($value);
-                }
-
-                if ($value = $item->calcAverageColdDamage()) {
-                    $item->setAverageColdDamage($value);
-                }
-
-                if ($value = $item->calcAverageLightningDamage()) {
-                    $item->setAverageLightningDamage($value);
-                }
-
-                $this->itemManager->updateBatch($item, $i);
-
-                $label = $row['name'] ?: $row['typeLine'];
-                $this->output->writeln("<info>ADD</info> ".$label);
-                $i++;
+                $this->itemManager->getEntityManager()->flush();
             }
-            $l++;
-            $this->itemManager->getEntityManager()->flush();
         }
     }
 
@@ -445,16 +456,35 @@ class CrawlCommand extends ContainerAwareCommand
         return $parentType;
     }
 
-    private function getJson($id)
+    private function getForumThreads($forum, $page)
     {
-        $url = 'http://www.pathofexile.com/forum/view-thread/'.$id;
+        $url = 'http://www.pathofexile.com/forum/view-forum/'.$forum.'/page/'.$page;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $html = curl_exec($ch);
         curl_close($ch);
 
-        $this->output->writeln('<comment>CRAWL</comment> http://www.pathofexile.com/forum/view-thread/'.$id);
+        $this->crawler = new Crawler($html);
+
+        $hrefs = [];
+        foreach ($this->crawler->filter('.thread .thread_title .title a')->extract(['href']) as $href) {
+            $hrefs[] = $href;
+        }
+
+        return $hrefs;
+    }
+
+    public function getThreadData($href)
+    {
+        $url = 'http://www.pathofexile.com'.$href;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $html = curl_exec($ch);
+        curl_close($ch);
+
+        $this->output->writeln('<comment>CRAWL</comment> '.$url);
 
         $this->crawler = new Crawler($html);
         $i=1;
@@ -468,5 +498,6 @@ class CrawlCommand extends ContainerAwareCommand
         $data = json_decode(utf8_encode($foo), true);
 
         return $data;
+
     }
 }

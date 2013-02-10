@@ -88,7 +88,10 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('type', 'entity', [
-                'empty_value' => 'All',
+                'empty_value' => '',
+                'attr' => [
+                    'class' => 'all',
+                ],
                 'class' => 'PoeCoreBundle:ItemType',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('a')
@@ -105,7 +108,10 @@ class SearchFormType extends AbstractType
             ])
             ->add('frameType', 'choice', [
                 'label' => ' ',
-                'empty_value' => 'All',
+                'empty_value' => '',
+                'attr' => [
+                    'class' => 'all',
+                ],
                 'choices' => [
                     Item::FRAME_TYPE_NORMAL => 'Normal',
                     Item::FRAME_TYPE_MAGIC => 'Magic',
@@ -115,6 +121,9 @@ class SearchFormType extends AbstractType
             ])
             ->add('prop1', 'choice', [
                 'constraints' => [new Choice(['choices' => $validPropChoices])],
+                'attr' => [
+                    'class' => 'none',
+                ],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $prop,
@@ -127,6 +136,9 @@ class SearchFormType extends AbstractType
             ])
             ->add('prop2', 'choice', [
                 'constraints' => [new Choice(['choices' => $validPropChoices])],
+                'attr' => [
+                    'class' => 'none',
+                ],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $prop,
@@ -139,6 +151,9 @@ class SearchFormType extends AbstractType
             ])
             ->add('prop3', 'choice', [
                 'constraints' => [new Choice(['choices' => $validPropChoices])],
+                'attr' => [
+                    'class' => 'none',
+                ],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $prop,
@@ -151,6 +166,9 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod1', 'choice', [
                 'constraints' => [new Choice(['choices' => $validModChoices])],
+                'attr' => [
+                    'class' => 'none',
+                ],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
@@ -163,6 +181,9 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod2', 'choice', [
                 'constraints' => [new Choice(['choices' => $validModChoices])],
+                'attr' => [
+                    'class' => 'none',
+                ],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
@@ -175,6 +196,9 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod3', 'choice', [
                 'constraints' => [new Choice(['choices' => $validModChoices])],
+                'attr' => [
+                    'class' => 'none',
+                ],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
@@ -187,6 +211,9 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod4', 'choice', [
                 'constraints' => [new Choice(['choices' => $validModChoices])],
+                'attr' => [
+                    'class' => 'none',
+                ],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
@@ -199,6 +226,9 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod5', 'choice', [
                 'constraints' => [new Choice(['choices' => $validModChoices])],
+                'attr' => [
+                    'class' => 'none',
+                ],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,
@@ -211,6 +241,9 @@ class SearchFormType extends AbstractType
             ])
             ->add('mod6', 'choice', [
                 'constraints' => [new Choice(['choices' => $validModChoices])],
+                'attr' => [
+                    'class' => 'none',
+                ],
                 'label' => ' ',
                 'empty_value' => '',
                 'choices' => $mod,

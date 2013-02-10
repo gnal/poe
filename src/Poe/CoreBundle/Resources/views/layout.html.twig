@@ -148,6 +148,17 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 .chzn-container-single .chzn-single span {
     height: 20px;
 }
+/* layout */
+#sidebar {
+    width: 220px;
+    position: absolute;
+}
+#content {
+    margin-left: 240px;
+}
+.container-fluid {
+    min-width: 960px;
+}
 </style>
 {{ parent() }}
 {% endblock css %}
@@ -160,7 +171,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 {% endblock js %}
 
 {% block body %}
-<div class="container">
+<div class="container-fluid">
     {% for key, message in app.session.flashbag.all() %}
     <div class="alert alert-{{ key }} fade in">
         <a class="close" data-dismiss="alert" href="#">×</a>
