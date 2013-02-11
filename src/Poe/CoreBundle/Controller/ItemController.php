@@ -78,7 +78,7 @@ class ItemController extends Controller
 
         $qb->setMaxResults(100);
         $qb->select(
-            'a.id',
+            // 'a.id',
             'a.frameType',
             'a.name',
             'a.threadId',

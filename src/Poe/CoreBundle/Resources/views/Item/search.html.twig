@@ -56,8 +56,8 @@
         </div>
 
         {{ form_rest(form) }}
-        <button class="btn" type=submit>Search</button>
-        <a class="btn" href="{{ path('poe_core_item_search') }}">Reset</a>
+        <p><button class="btn btn-inverse btn-block" type=submit><i class="icon-search icon-white"></i></button></p>
+        <p><a class="badge badge-warning" href="{{ path('poe_core_item_search') }}">Reset</a></p>
     </form>
 </div>
 <div id="content">
@@ -116,8 +116,13 @@
     $('.chzn-container-single .chzn-single').on('mousedown', function(evt) {
         if ($(evt.target).hasClass("search-choice-close")) {
             var id = $(this).closest('div').attr('id');
-            $('div.'+id).children('input').attr('value', '');
+            $('div.'+id).children('input').attr('value', '').blur();
         }
+    });
+
+    $('.active-result').on('click', function(evt) {
+        var id = $(this).closest('div.chzn-container').attr('id');
+        $('div.'+id).children('input').focus();
     });
 
     $('form').on('submit', function(e) {
