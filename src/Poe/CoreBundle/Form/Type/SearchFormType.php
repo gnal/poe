@@ -18,6 +18,7 @@ class SearchFormType extends AbstractType
     {
         $validPropChoices = [
             'averagePhysicalDamage',
+            'averageElementalDamage',
             'criticalStrikeChance',
             'attacksPerSecond',
             'armour',
@@ -50,6 +51,7 @@ class SearchFormType extends AbstractType
 
         $prop = [
             'averagePhysicalDamage' => 'Avg Physical Dmg',
+            'averageElementalDamage' => 'Avg Elemental Dmg',
             'criticalStrikeChance' => 'Crit Strike Chance',
             'attacksPerSecond' => 'APS',
             'armour' => 'Armour',
@@ -122,6 +124,7 @@ class SearchFormType extends AbstractType
                     Item::FRAME_TYPE_UNIQUE => 'Unique',
                 ],
             ])
+
             ->add('prop1', 'choice', [
                 'constraints' => [new Choice(['choices' => $validPropChoices])],
                 'attr' => [
@@ -137,6 +140,7 @@ class SearchFormType extends AbstractType
                     'style' => 'width: 36px;',
                 ],
             ])
+
             ->add('prop2', 'choice', [
                 'constraints' => [new Choice(['choices' => $validPropChoices])],
                 'attr' => [
@@ -152,6 +156,7 @@ class SearchFormType extends AbstractType
                     'style' => 'width: 36px;',
                 ],
             ])
+
             ->add('prop3', 'choice', [
                 'constraints' => [new Choice(['choices' => $validPropChoices])],
                 'attr' => [
@@ -167,6 +172,23 @@ class SearchFormType extends AbstractType
                     'style' => 'width: 36px;',
                 ],
             ])
+
+            ->add('prop4', 'choice', [
+                'constraints' => [new Choice(['choices' => $validPropChoices])],
+                'attr' => [
+                    'class' => 'none',
+                ],
+                'label' => ' ',
+                'empty_value' => '',
+                'choices' => $prop,
+            ])
+            ->add('prop4val', 'text', [
+                'constraints' => [new Type(['type' => 'numeric'])],
+                'attr' => [
+                    'style' => 'width: 36px;',
+                ],
+            ])
+
             ->add('mod1', 'choice', [
                 'constraints' => [new Choice(['choices' => $validModChoices])],
                 'attr' => [

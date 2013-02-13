@@ -93,8 +93,8 @@ class CrawlCommand extends ContainerAwareCommand
 
     protected function process()
     {
-        for ($page=6; $page < 7; $page++) {
-            $hrefs = $this->getForumThreads(306, $page);
+        // for ($page=2; $page < 3; $page++) {
+            $hrefs = $this->getForumThreads(306, 30);
 
             foreach ($hrefs as $href) {
                 $data = $this->getThreadData($href);
@@ -323,6 +323,10 @@ class CrawlCommand extends ContainerAwareCommand
                         $item->setAverageLightningDamage($value);
                     }
 
+                    if ($value = $item->calcAverageElementalDamage()) {
+                        $item->setAverageElementalDamage($value);
+                    }
+
                     $this->itemManager->updateBatch($item, $i);
 
                     $label = $row['name'] ?: $row['typeLine'];
@@ -331,7 +335,7 @@ class CrawlCommand extends ContainerAwareCommand
                 }
                 $this->itemManager->getEntityManager()->flush();
             }
-        }
+        // }
     }
 
     private function findType($row)

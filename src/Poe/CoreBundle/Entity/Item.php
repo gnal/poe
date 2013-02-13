@@ -112,6 +112,11 @@ class Item
     protected $averageLightningDamage;
 
     /**
+     * @ORM\Column(type="decimal", scale=1, nullable=true)
+     */
+    protected $averageElementalDamage;
+
+    /**
      * @ORM\Column(type="decimal", scale=2, nullable=true)
      */
     protected $criticalStrikeChance;
@@ -331,6 +336,18 @@ class Item
     public function calcAverageLightningDamage()
     {
         return $this->calcAverageDamage($this->minLightningDamage, $this->maxLightningDamage);
+    }
+
+    public function getAverageElementalDamage()
+    {
+        return $this->averageElementalDamage;
+    }
+
+    public function setAverageElementalDamage($averageElementalDamage)
+    {
+        $this->averageElementalDamage = $averageElementalDamage;
+
+        return $this;
     }
 
     public function getIntelligence()
