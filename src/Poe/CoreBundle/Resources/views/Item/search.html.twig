@@ -59,7 +59,7 @@
 
         {{ form_rest(form) }}
         <p><button class="btn btn-inverse btn-block" type=submit><i class="icon-search icon-white"></i></button></p>
-        <p><a class="badge badge-warning" href="{{ path('poe_core_item_search') }}">Reset</a></p>
+        {#<p><a class="badge badge-warning" href="{{ path('poe_core_item_search') }}">Reset</a></p>#}
     </form>
 </div>
 <div id="content">
@@ -110,6 +110,12 @@
     })
 
     $('input.alert-error').tooltip({
+        trigger: 'hover',
+        html: true,
+        animation: false
+    })
+
+    $('small.aed').tooltip({
         trigger: 'hover',
         html: true,
         animation: false

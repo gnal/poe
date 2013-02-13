@@ -76,7 +76,7 @@ class ItemController extends Controller
             }
         }
 
-        $qb->setMaxResults(100);
+        $qb->setMaxResults(150);
         $qb->select(
             // 'a.id',
             'a.frameType',
@@ -90,8 +90,9 @@ class ItemController extends Controller
             'a.armour',
             'a.evasionRating',
             'a.energyShield',
-            'a.minColdDamage',
-            'a.minLightningDamage'
+            'a.attacksPerSecond',
+            'a.criticalStrikeChance',
+            'a.averageElementalDamage'
         );
         $items = $qb->getQuery()->execute();
 

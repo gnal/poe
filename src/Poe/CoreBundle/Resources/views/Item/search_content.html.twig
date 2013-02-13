@@ -7,6 +7,8 @@
             <th><abbr title="Dmg per Second">DPS</abbr></th>
             <th><abbr title="Avg Physical Dmg">APD</abbr></th>
             <th><abbr title="Avg Elemental Dmg">AED</abbr></th>
+            <th><abbr title="Critical Strike Chance">Crit</abbr></th>
+            <th><abbr title="Attacks per Second">APS</abbr></th>
             <th>Armour</th>
             <th><abbr title="Evasion Rating">ER</abbr></th>
             <th><abbr title="Energy Shield">ES</abbr></th>
@@ -17,44 +19,48 @@
                 <a class="item text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
                     {{ item.name }}
                 </a>
-                {#<small>{{ item.name ? item.type : item.type.parent }}</small>#}
+                {#<span>{{ item.name ? item.type : item.type.parent }}</span>#}
                 {#<br>
-                <small>
+                <span>
                     Req:
                     {% if item.lvlReq %}<span class="muted">Lvl: {{ item.lvlReq }}</span>{% endif %}
                     {% if item.strReq %}<span class="text-error">Str: {{ item.strReq }}</span>{% endif %}
                     {% if item.dexReq %}<span class="text-success">Dex: {{ item.dexReq }}</span>{% endif %}
                     {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
-                </small>#}
+                </span>#}
             </td>
             {#<td>
-                <small>
+                <span>
                     {% if item.lvlReq %}<span class="muted">Lvl: {{ item.lvlReq }}</span>{% endif %}
                     {% if item.strReq %}<span class="text-error">Str: {{ item.strReq }}</span>{% endif %}
                     {% if item.dexReq %}<span class="text-success">Dex: {{ item.dexReq }}</span>{% endif %}
                     {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
-                </small>
+                </span>
             </td>#}
             <td>{{ item.dps|number_format }}</td>
             <td>
                 {% if item.averagePhysicalDamage %}
-                    <small class="muted">{{ item.averagePhysicalDamage|number_format }}</small>
+                    <span class="muted">{{ item.averagePhysicalDamage|number_format }}</span>
                 {% endif %}
             </td>
             <td>
-                {#<small class="text-error">{{ item.calcAverageElementalDamage|number_format }}</small>#}
+                <span class="text-success" style="margin-right: 20px;">{{ item.averageElementalDamage|number_format }}</span>
+                <span class="pull-right">
                 {% if item.averageFireDamage %}
-                    <small class="text-error">{{ item.averageFireDamage|number_format }}</small>
-                    <small class="muted">{% if item.minColdDamage or item.minLightningDamage %}+{% endif %}</small>
+                    <span class="text-error">{{ item.averageFireDamage|number_format }}</span>
+                    <span class="muted">{% if item.averageColdDamage or item.averageLightningDamage %}+{% endif %}</span>
                 {% endif %}
                 {% if item.averageColdDamage %}
-                    <small class="text-info">{{ item.averageColdDamage|number_format }}</small>
-                    <small class="muted">{% if item.minLightningDamage %}+{% endif %}</small>
+                    <span class="text-info">{{ item.averageColdDamage|number_format }}</span>
+                    <span class="muted">{% if item.averageLightningDamage %}+{% endif %}</span>
                 {% endif %}
                 {% if item.averageLightningDamage %}
-                    <small class="text-warning">{{ item.averageLightningDamage|number_format }}</small>
+                    <span class="text-warning">{{ item.averageLightningDamage|number_format }}</span>
                 {% endif %}
+                </span>
             </td>
+            <td>{{ item.criticalStrikeChance }}</td>
+            <td>{{ item.attacksPerSecond }}</td>
             <td>{{ item.armour }}</td>
             <td>{{ item.evasionRating }}</td>
             <td>{{ item.energyShield }}</td>
