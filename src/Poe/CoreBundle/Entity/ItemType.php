@@ -3,7 +3,7 @@
 namespace Poe\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+// use Doctrine\Common\Collections\ArrayCollection;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -61,15 +61,15 @@ class ItemType
      */
     protected $children;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Item", mappedBy="type")
-     */
-    protected $items;
+    // *
+    //  * @ORM\OneToMany(targetEntity="Item", mappedBy="type")
 
-    public function __construct()
-    {
-        $this->items = new ArrayCollection();
-    }
+    // protected $items;
+
+    // public function __construct()
+    // {
+    //     $this->items = new ArrayCollection();
+    // }
 
     public function getName()
     {
@@ -155,17 +155,17 @@ class ItemType
         return $this;
     }
 
-    public function getItems()
-    {
-        return $this->items;
-    }
+    // public function getItems()
+    // {
+    //     return $this->items;
+    // }
 
-    public function setItems($items)
-    {
-        $this->items = $items;
+    // public function setItems($items)
+    // {
+    //     $this->items = $items;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getId()
     {

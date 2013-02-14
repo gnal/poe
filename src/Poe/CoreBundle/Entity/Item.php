@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity
+ * @ORM\MappedSuperclass
  */
 class Item
 {
@@ -46,100 +46,100 @@ class Item
      */
     protected $quality;
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $dps;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $dps;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $minPhysicalDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $minPhysicalDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $maxPhysicalDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $maxPhysicalDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $minFireDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $minFireDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $maxFireDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $maxFireDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $minColdDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $minColdDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $maxColdDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $maxColdDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $minLightningDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $minLightningDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $maxLightningDamage;
+    // *
+    //  * @ORM\Column(type="integer", nullable=true)
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $averagePhysicalDamage;
+    // protected $maxLightningDamage;
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $averageFireDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $averagePhysicalDamage;
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $averageColdDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $averageFireDamage;
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $averageLightningDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $averageColdDamage;
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $averageElementalDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $averageLightningDamage;
 
-    /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    protected $criticalStrikeChance;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $averageElementalDamage;
 
-    /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    protected $attacksPerSecond;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=2, nullable=true)
+    //  */
+    // protected $criticalStrikeChance;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $armour;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=2, nullable=true)
+    //  */
+    // protected $attacksPerSecond;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $evasionRating;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $armour;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $energyShield;
+    // *
+    //  * @ORM\Column(type="integer", nullable=true)
+
+    // protected $evasionRating;
+
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $energyShield;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -196,10 +196,14 @@ class Item
      */
     protected $threadId;
 
+    // mods
+
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $mapLvl;
+
+    // explicit mods
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -250,7 +254,7 @@ class Item
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $increasedElementalDamageWeapons;
+    protected $increasedWeaponElementalDamage;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -301,54 +305,6 @@ class Item
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $maxEnergyShield;
-
-    public function calcDps()
-    {
-        $combinedAverageDamage = $this->calcAveragePhysicalDamage() + $this->calcAverageFireDamage() + $this->calcAverageColdDamage() + $this->calcAverageLightningDamage();
-
-        $crit = 1 + $this->criticalStrikeChance / 100;
-
-        $dps = $this->attacksPerSecond * $combinedAverageDamage * $crit;
-
-        return $dps;
-    }
-
-    public function calcAverageElementalDamage()
-    {
-        return $this->calcAverageFireDamage() + $this->calcAverageColdDamage() + $this->calcAverageLightningDamage();
-    }
-
-    public function calcAveragePhysicalDamage()
-    {
-        return $this->calcAverageDamage($this->minPhysicalDamage, $this->maxPhysicalDamage);
-    }
-
-    public function calcAverageFireDamage()
-    {
-        return $this->calcAverageDamage($this->minFireDamage, $this->maxFireDamage);
-    }
-
-    public function calcAverageColdDamage()
-    {
-        return $this->calcAverageDamage($this->minColdDamage, $this->maxColdDamage);
-    }
-
-    public function calcAverageLightningDamage()
-    {
-        return $this->calcAverageDamage($this->minLightningDamage, $this->maxLightningDamage);
-    }
-
-    public function getAverageElementalDamage()
-    {
-        return $this->averageElementalDamage;
-    }
-
-    public function setAverageElementalDamage($averageElementalDamage)
-    {
-        $this->averageElementalDamage = $averageElementalDamage;
-
-        return $this;
-    }
 
     public function getIntelligence()
     {
@@ -434,14 +390,14 @@ class Item
         return $this;
     }
 
-    public function getIncreasedElementalDamageWeapons()
+    public function getIncreasedWeaponElementalDamage()
     {
-        return $this->increasedElementalDamageWeapons;
+        return $this->increasedWeaponElementalDamage;
     }
 
-    public function setIncreasedElementalDamageWeapons($increasedElementalDamageWeapons)
+    public function setIncreasedWeaponElementalDamage($increasedWeaponElementalDamage)
     {
-        $this->increasedElementalDamageWeapons = $increasedElementalDamageWeapons;
+        $this->increasedWeaponElementalDamage = $increasedWeaponElementalDamage;
 
         return $this;
     }
@@ -590,66 +546,6 @@ class Item
         return $this;
     }
 
-    public function getAveragePhysicalDamage()
-    {
-        return $this->averagePhysicalDamage;
-    }
-
-    public function setAveragePhysicalDamage($averagePhysicalDamage)
-    {
-        $this->averagePhysicalDamage = $averagePhysicalDamage;
-
-        return $this;
-    }
-
-    public function getAverageFireDamage()
-    {
-        return $this->averageFireDamage;
-    }
-
-    public function setAverageFireDamage($averageFireDamage)
-    {
-        $this->averageFireDamage = $averageFireDamage;
-
-        return $this;
-    }
-
-    public function getAverageColdDamage()
-    {
-        return $this->averageColdDamage;
-    }
-
-    public function setAverageColdDamage($averageColdDamage)
-    {
-        $this->averageColdDamage = $averageColdDamage;
-
-        return $this;
-    }
-
-    public function getAverageLightningDamage()
-    {
-        return $this->averageLightningDamage;
-    }
-
-    public function setAverageLightningDamage($averageLightningDamage)
-    {
-        $this->averageLightningDamage = $averageLightningDamage;
-
-        return $this;
-    }
-
-    public function getDps()
-    {
-        return $this->dps;
-    }
-
-    public function setDps($dps)
-    {
-        $this->dps = $dps;
-
-        return $this;
-    }
-
     public function getMapLvl()
     {
         return $this->mapLvl;
@@ -658,138 +554,6 @@ class Item
     public function setMapLvl($mapLvl)
     {
         $this->mapLvl = $mapLvl;
-
-        return $this;
-    }
-
-    public function getMinFireDamage()
-    {
-        return $this->minFireDamage;
-    }
-
-    public function setMinFireDamage($minFireDamage)
-    {
-        $this->minFireDamage = $minFireDamage;
-
-        return $this;
-    }
-
-    public function getMaxFireDamage()
-    {
-        return $this->maxFireDamage;
-    }
-
-    public function setMaxFireDamage($maxFireDamage)
-    {
-        $this->maxFireDamage = $maxFireDamage;
-
-        return $this;
-    }
-
-    public function getMinColdDamage()
-    {
-        return $this->minColdDamage;
-    }
-
-    public function setMinColdDamage($minColdDamage)
-    {
-        $this->minColdDamage = $minColdDamage;
-
-        return $this;
-    }
-
-    public function getMaxColdDamage()
-    {
-        return $this->maxColdDamage;
-    }
-
-    public function setMaxColdDamage($maxColdDamage)
-    {
-        $this->maxColdDamage = $maxColdDamage;
-
-        return $this;
-    }
-
-    public function getMinLightningDamage()
-    {
-        return $this->minLightningDamage;
-    }
-
-    public function setMinLightningDamage($minLightningDamage)
-    {
-        $this->minLightningDamage = $minLightningDamage;
-
-        return $this;
-    }
-
-    public function getMaxLightningDamage()
-    {
-        return $this->maxLightningDamage;
-    }
-
-    public function setMaxLightningDamage($maxLightningDamage)
-    {
-        $this->maxLightningDamage = $maxLightningDamage;
-
-        return $this;
-    }
-
-    public function getAttacksPerSecond()
-    {
-        return $this->attacksPerSecond;
-    }
-
-    public function setAttacksPerSecond($attacksPerSecond)
-    {
-        $this->attacksPerSecond = $attacksPerSecond;
-
-        return $this;
-    }
-
-    public function getArmour()
-    {
-        return $this->armour;
-    }
-
-    public function setArmour($armour)
-    {
-        $this->armour = $armour;
-
-        return $this;
-    }
-
-    public function getEvasionRating()
-    {
-        return $this->evasionRating;
-    }
-
-    public function setEvasionRating($evasionRating)
-    {
-        $this->evasionRating = $evasionRating;
-
-        return $this;
-    }
-
-    public function getEnergyShield()
-    {
-        return $this->energyShield;
-    }
-
-    public function setEnergyShield($energyShield)
-    {
-        $this->energyShield = $energyShield;
-
-        return $this;
-    }
-
-    public function getCriticalStrikeChance()
-    {
-        return $this->criticalStrikeChance;
-    }
-
-    public function setCriticalStrikeChance($criticalStrikeChance)
-    {
-        $this->criticalStrikeChance = $criticalStrikeChance;
 
         return $this;
     }
@@ -826,30 +590,6 @@ class Item
     public function setAccountName($accountName)
     {
         $this->accountName = $accountName;
-
-        return $this;
-    }
-
-    public function getMinPhysicalDamage()
-    {
-        return $this->minPhysicalDamage;
-    }
-
-    public function setMinPhysicalDamage($minPhysicalDamage)
-    {
-        $this->minPhysicalDamage = $minPhysicalDamage;
-
-        return $this;
-    }
-
-    public function getMaxPhysicalDamage()
-    {
-        return $this->maxPhysicalDamage;
-    }
-
-    public function setMaxPhysicalDamage($maxPhysicalDamage)
-    {
-        $this->maxPhysicalDamage = $maxPhysicalDamage;
 
         return $this;
     }
@@ -974,11 +714,6 @@ class Item
         return $this;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getFrameType()
     {
         return $this->frameType;
@@ -994,10 +729,5 @@ class Item
     public function __toString()
     {
         return (string) $this->type;
-    }
-
-    private function calcAverageDamage($min, $max)
-    {
-        return ($max - $min) / 2 + $min;
     }
 }
