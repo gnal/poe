@@ -1,4 +1,5 @@
 <div id="results">
+    {% if items is defined %}
     {% if items|length %}
     <table class="table table-bordered">
         <tr>
@@ -44,6 +45,7 @@
                 {% endif %}
             </td>
             <td>
+                {% if item.averageElementalDamage %}
                 <span class="text-success" style="margin-right: 20px;">{{ item.averageElementalDamage|number_format }}</span>
                 <span class="pull-right">
                 {% if item.averageFireDamage %}
@@ -58,6 +60,7 @@
                     <span class="text-warning">{{ item.averageLightningDamage|number_format }}</span>
                 {% endif %}
                 </span>
+                {% endif %}
             </td>
             <td>{{ item.criticalStrikeChance }}</td>
             <td>{{ item.attacksPerSecond }}</td>
@@ -71,5 +74,6 @@
     </table>
     {% else %}
     Nothing was found.
+    {% endif %}
     {% endif %}
 </div>

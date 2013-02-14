@@ -82,6 +82,10 @@ class SearchFormType extends AbstractType
             'maxEnergyShield' => 'Max Energy Shield',
         ];
 
+        foreach (range(20, 1) as $range) {
+            $quality[$range] = $range;
+        }
+
         $builder
             ->  add('league', 'choice', [
                 'attr' => [
@@ -123,6 +127,15 @@ class SearchFormType extends AbstractType
                     Item::FRAME_TYPE_RARE => 'Rare',
                     Item::FRAME_TYPE_UNIQUE => 'Unique',
                 ],
+            ])
+
+            ->add('quality', 'choice', [
+                'label' => ' ',
+                'empty_value' => '',
+                'attr' => [
+                    'class' => 'all',
+                ],
+                'choices' => $quality,
             ])
 
             ->add('prop1', 'choice', [

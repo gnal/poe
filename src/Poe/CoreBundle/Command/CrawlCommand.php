@@ -62,7 +62,7 @@ class CrawlCommand extends ContainerAwareCommand
         $this
             ->setName('poe:core:crawl')
             ->setDefinition(array(
-                new InputArgument('id', InputArgument::OPTIONAL, 'The thread ID'),
+                new InputArgument('page', InputArgument::OPTIONAL, 'The forum page'),
             ))
         ;
     }
@@ -72,29 +72,20 @@ class CrawlCommand extends ContainerAwareCommand
         $this->getContainer()->get('msi_cmf.translatable_listener')->setSkipPostLoad(true);
         $this->itemManager = $this->getContainer()->get('poe_core.item_manager');
         $this->itemTypeManager = $this->getContainer()->get('poe_core.item_type_manager');
-        $id = $input->getArgument('id');
+        $page = $input->getArgument('page');
         $this->output = $output;
 
-        if ($id) {
-            $this->processID($id);
-        } else {
-            $this->process();
-        }
+        $this->process($page);
 
         $this->output->writeln("<comment>Done!</comment>");
     }
 
-    protected function processID($id)
-    {
-        $data = $this->getJson($id);
-
-        die(print_r($data[0]));
-    }
-
-    protected function process()
+    protected function process($page = 1)
     {
         // for ($page=2; $page < 3; $page++) {
-            $hrefs = $this->getForumThreads(306, 30);
+            $hrefs = $this->getForumThreads(306, $page);
+
+            $this->output->writeln('<comment>CRAWLING</comment> forum 306 page '.$page);
 
             foreach ($hrefs as $href) {
                 $data = $this->getThreadData($href);
@@ -118,7 +109,8 @@ class CrawlCommand extends ContainerAwareCommand
 
                     if (
                         !$row['verified'] ||
-                        $row['frameType'] == 5
+                        $row['frameType'] == 5 ||
+                        $row['frameType'] == 4
                     ) {
                         continue;
                     }

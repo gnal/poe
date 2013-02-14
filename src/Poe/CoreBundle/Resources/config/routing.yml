@@ -1,7 +1,7 @@
 poe_core_item_search:
     pattern:  /
-    defaults: { _controller: PoeCoreBundle:Item:search }
+    defaults: { _controller: PoeCoreBundle:Search:search }
 
 poe_core_item_view_json:
     pattern:  /item/{id}/view-json
-    defaults: { _controller: PoeCoreBundle:Item:viewJson }
+    defaults: { _controller: PoeCoreBundle:Search:viewJson }
